@@ -1,10 +1,21 @@
 const $html = document.querySelector('html');
 
 export const modal = {
-  bind: function(el){
-    $html.style.overflowY = 'hidden';
+  componentUpdated: function(el){
+    console.log('=====  componentUpdated  =====');
+    // $html.style.overflowY = 'auto';
   },
   unbind: function(){
-    $html.style.overflowY = 'auto';
-  }
+    console.log('=====  unbind  =====');
+    // $html.style.overflowY = 'hidden';
+  },
+  update: function(){
+    console.log('=====  update  =====');
+  },
+  inserted: function(){
+    console.log('=====  inserted  =====');
+  },
+  bind: function(){
+    console.log('=====  bind  =====');
+  },
 };

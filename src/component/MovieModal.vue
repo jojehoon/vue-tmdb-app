@@ -66,6 +66,20 @@
       },
     },
 
+    watch: {
+      GET_MODAL: function(newVal) {
+        if(newVal){
+          setTimeout(() => {
+            document.body.classList.add = 'is-scroll-blocking';
+          }, 1000)
+        } else {
+          setTimeout(() => {
+            document.body.classList.remove = 'is-scroll-blocking';
+          }, 500)
+        }
+      }
+    },
+
     mounted: function(){
       console.dir(this.GET_MOVIE);
       document.addEventListener('keydown', (e) => {

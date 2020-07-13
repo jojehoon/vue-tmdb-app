@@ -1,6 +1,6 @@
 <template>
   <section class="movies">
-    <h2 class="movies__category">{{ this.sort | toCapitalize(' Movies')}}</h2>
+    <h2 class="movies__category">{{ categoryTitle | toCapitalize(' Movies')}}</h2>
     <Loader v-show="loader"></Loader>
     <ul class="movies__list">
       <li class="movies__item"
@@ -9,18 +9,17 @@
       >
         <a class="movies__link" @click="openModal(movie)">
           <figure class="movies__poster">
-            <img class="movies__image" :src="movieImageUrl(movie)" :title="movie.title">
+            <!-- <img class="movies__image" :src="movieImageUrl(movie)" :title="movie.title"> -->
+            <img class="movies__image" src="../assets/no-image.png" :title="movie.title">
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
         </a>
       </li>
     </ul>
-    <button @click="FETCH_MOVIES_MORE" style="width:100%;line-height:50px;">Mores</button>
+    <button class="button" @click="FETCH_MOVIES_MORE">Load More</button>
 
     <transition name="fade">
-      <MovieModal 
-        v-show="GET_MODAL" 
-      ></MovieModal>
+      <MovieModal v-show="GET_MODAL"></MovieModal>
     </transition>
   </section>
 </template>
@@ -35,6 +34,13 @@ export default {
   components: {
     MovieModal,
     Loader,
+  },
+
+  props: {
+    categoryTitle: {
+      type: String,
+      default: this.sort,
+    },
   },
 
   filters: {
@@ -56,7 +62,8 @@ export default {
   methods: {
     ...mapActions([
       'FETCH_MOVIES_MORE',
-      'FETCH_MOVIE'
+      'FETCH_MOVIES_SORT',
+      'FETCH_MOVIE',
     ]),
 
     openModal(movie){
@@ -70,6 +77,17 @@ export default {
         return '../../src/assets/no-image.png';
       }
     },
+  },
+
+  beforeRouteUpdate(to, from, next){
+    console.log(to.params.sort);
+    this.FETCH_MOVIES_SORT(to.params.sort);
+    next();
+  },
+
+  created: function(){
+    // console.log(this.$route.params.sort);
+    // this.FETCH_MOVIES_SORT(this.$route.params.sort);
   },
 
 }
@@ -109,6 +127,7 @@ export default {
     }
     &__poster {
       background: #fff;
+      box-shadow: 0 0 10px rgba(8, 28, 36, 0);
       font-size: 0px;
       transition: all .5s ease;
     }

@@ -3,7 +3,9 @@
     <Header :keyword="keyword"></Header>
     <Nav></Nav>
     <main class="main" @scroll="infiniteScroll">
-      <router-view v-bind:keyword="keyword"></router-view>
+      <transition name="fade">
+        <router-view :keyword="keyword" :key="this.$route.params.sort"></router-view>
+      </transition>
     </main>
   </div>
 </template>
@@ -68,6 +70,9 @@ body, button, figcaption, h1, h2, h3, input, li {
   font-family: 'Roboto', 'sans-serf';
 }
 
+body {
+}
+
 button {
   border: none;
   background: none;
@@ -80,16 +85,17 @@ fieldset {
   border: none;
 }
 
-html {
-  overflow-y: scroll
-}
-
 hr {
   display: none;
 }
 
 ol, ul, li {
   list-style: none;
+}
+
+.is-scroll-blocking {
+  overflow-y: hidden;
+  padding-right: 17px;
 }
 
 .a11y {
@@ -100,6 +106,26 @@ ol, ul, li {
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
   white-space: nowrap;
+}
+
+.button{
+  display: inline-block;
+  padding: 5px 20px 4px 20px;
+  border: 1px solid #081c24;
+  background: transparent;
+  font-weight: 300;
+  font-size: 11px;
+  color: #081c24;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  line-height: 2;
+  text-transform: uppercase;
+  outline: none;
+  transition: background 0.5s ease, color 0.5s ease;
+  &:hover{
+    background: #081c24;
+    color: #fff;
+  }
 }
 
 .wrap {
@@ -129,10 +155,16 @@ ol, ul, li {
   height: 1000px;
   background-color: hotpink;
 }
+
+// router view transition
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition-property: opacity;
+  transition-duration: 0.5s;
 }
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.fade-enter-active {
+  transition-delay: 0.5s;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
 </style>

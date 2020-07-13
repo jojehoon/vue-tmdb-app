@@ -1,7 +1,8 @@
 import Vue       from 'vue';
 import VueRouter from 'vue-router';
-import MovieList from '../component/MovieList.vue';
+import Home      from '../views/Home.vue';
 import Search    from '../views/Search.vue';
+import MovieList from '../component/MovieList.vue';
 
 Vue.use(VueRouter);
 
@@ -11,6 +12,13 @@ const router = new VueRouter({
     { 
       path: '/', 
       name: 'Main',
+      components: {
+        default: Home
+      }
+    },
+    {
+      path: '/movie/:sort',
+      name: 'Movie',
       components: {
         default: MovieList
       }

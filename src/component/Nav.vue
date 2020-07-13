@@ -1,9 +1,10 @@
 <template>
   <nav class="nav">
-    <a class="logo__link" href="#none" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></a>
+    <a class="logo__link" href="/" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></a>
     <ul class="nav__list">
       <li class="nav__item" v-for="(category, index) in categories" v-bind:key="index">
-        <button class="nav__link" type="button" @click="fetchMoviesSort(category)">{{ category | toUpperCase }}</button>
+        <!-- <button class="nav__link" type="button" @click="fetchMoviesSort(category)">{{ category | toUpperCase }}</button> -->
+        <router-link class="nav__link" :to="{name: 'Movie', params: {sort: category}}">{{ category | toUpperCase }}</router-link>
       </li>
     </ul>
   </nav>
@@ -35,9 +36,9 @@ export default {
       'FETCH_MOVIES_SORT'
     ]),
 
-    fetchMoviesSort(category){
-      return this.FETCH_MOVIES_SORT(category);
-    },
+    // fetchMoviesSort(category){
+    //   return this.FETCH_MOVIES_SORT(category);
+    // },
 
   }
 }

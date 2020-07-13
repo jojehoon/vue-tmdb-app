@@ -73,7 +73,7 @@ export default new Vuex.Store({
       return Axios.get(`${state.urlSearch}?api_key=${state.apiKey}&language=${state.language}&page=${state.page}&include_adult=false&query=${keyword}`)
       .then(res => commit('SET_MOVIES', res.data.results))
       .then(() => console.dir(getters.GET_MOVIES))
-      .then(() => router.push(`/search/:${keyword}`));
+      // .then(() => router.push(`/search/:${keyword}`));
       // .then((res) => console.dir(res.data.results))
     },
 
