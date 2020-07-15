@@ -10,7 +10,7 @@ export default {
   // props: ['keyword'],
   data(){
     return {
-      keyword: 'hunt',
+      keyword: '',
     }
   },
   methods: {

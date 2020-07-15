@@ -44,7 +44,7 @@ export default {
       'FETCH_MOVIES_MORE',
     ]),
 
-    // TODO 수정 필요
+    // FIXME 수정 필요
     infiniteScroll(){
       if((window.innerHeight + window.scrollX) >= document.body.offsetHeight){
         this.loading = true;

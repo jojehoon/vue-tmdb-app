@@ -1,10 +1,8 @@
 <template>
   <nav class="nav">
-    <a href="/" ></a>
     <router-link  class="logo__link" to="/" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></router-link>
     <ul class="nav__list">
       <li class="nav__item" v-for="(category, index) in categories" v-bind:key="index">
-        <!-- <button class="nav__link" type="button" @click="fetchMoviesSort(category)">{{ category | toUpperCase }}</button> -->
         <router-link class="nav__link" :to="{name: 'Movie', params: {sort: category}}">{{ category | toUpperCase }}</router-link>
       </li>
     </ul>
@@ -13,7 +11,6 @@
 
 <script>
 import { toUpperCase } from '../filter/index.js';
-import { mapActions } from 'vuex';
 
 export default {
   filters: {
@@ -22,7 +19,7 @@ export default {
 
   data: function(){
     return {
-      // TODO state로 이동
+      // FIXME state로 이동
       categories : {
         popular   : 'popular',
         now       : 'now_playing',
@@ -31,17 +28,6 @@ export default {
       },
     }
   },
-
-  methods: {
-    ...mapActions([
-      'FETCH_MOVIES_SORT'
-    ]),
-
-    // fetchMoviesSort(category){
-    //   return this.FETCH_MOVIES_SORT(category);
-    // },
-
-  }
 }
 </script>
 

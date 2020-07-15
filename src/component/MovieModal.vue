@@ -53,7 +53,7 @@
         'GET_MOVIE',
       ]),
       
-      // TODO null 일때 예외 처리할 것
+      // FIXME null 일때 예외 처리할 것
       moviePathBackdrop(){
         if(this.GET_MOVIE.poster_path) return`background-image:url('https://image.tmdb.org/t/p/w500${this.GET_MOVIE.backdrop_path}')`;
         return 

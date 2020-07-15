@@ -19,9 +19,11 @@ export default new Vuex.Store({
     language   : 'en',
     loader     : false,
     modal      : false,
+    // keyword    : '',
   },
 
   getters: {
+    // GET_KEYWORD      : (state) => state.keyword,
     GET_MOVIES       : (state) => state.movies,
     GET_MOVIE        : (state) => state.movie,
     GET_MODAL        : (state) => state.modal,
@@ -29,6 +31,7 @@ export default new Vuex.Store({
 
   mutations: {
     SET_LOADER_TOGGLE : (state)              => state.loading = state.loading ? false : true,
+    // SET_KEYWORD       : (state, keyword)              => state.keyword = keyword,
     SET_MODAL_CLOSE   : (state)              => state.modal = false,
     SET_MODAL_OPEN    : (state)              => state.modal = true,
     SET_MOVIE         : (state, movie)       => state.movie = movie,
@@ -69,12 +72,24 @@ export default new Vuex.Store({
       .then(res => commit('SET_MOVIES', res.data.results));
     },
 
-    FETCH_SEARCH({state, commit}, {keyword}){
-      router.push(`/search/movie/:${keyword}`);
+    FETCH_SEARCH_API({state}, keyword){
       return Axios.get(`${state.urlSearch}?api_key=${state.apiKey}&language=${state.language}&page=${state.page}&include_adult=false&query=${keyword}`)
-      .then(res => commit('SET_MOVIES', res.data.results))
-      // .then(() => router.push(`/search/movie/:${keyword}`))
     },
+
+    FETCH_SEARCH({state, commit, dispatch}, {keyword}){
+      console.log(router.history.current.params.keyword, keyword);
+      console.dir(router.history.current);
+      router.push({
+        path: `/search/movie/:${keyword}`,
+        params: {
+          keyword: keyword
+        }
+      })
+      return dispatch('FETCH_SEARCH_API', keyword)
+      .then(res => commit('SET_MOVIES', res.data.results))
+      // .then(() => )
+      .catch((err) => console.log(err.message))
+    }
 
   },
 });

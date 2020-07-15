@@ -79,15 +79,11 @@ export default {
     },
   },
 
-  // TODO 재검색시 아래 때문에 에러발생
+  // TODO params가 sort일 때만 실행
   beforeRouteUpdate(to, from, next){
+    if(!this.$route.params.hasOwnProperty('sort')) return;
     this.FETCH_MOVIES_SORT(to.params.sort);
     next();
-  },
-
-  created: function(){
-    // console.log(this.$route.params.sort);
-    // this.FETCH_MOVIES_SORT(this.$route.params.sort);
   },
 
 }
