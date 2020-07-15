@@ -60,7 +60,7 @@
       },
 
       moviePathPoster(){
-        console.log(this.GET_MOVIE.poster_path);
+        // console.log(this.GET_MOVIE.poster_path);
         if(this.GET_MOVIE.poster_path) return `https://image.tmdb.org/t/p/w600_and_h900_bestv2${this.GET_MOVIE.poster_path}`
         return '../../src/assets/no-image.png';
       },
@@ -81,7 +81,6 @@
     },
 
     mounted: function(){
-      console.dir(this.GET_MOVIE);
       document.addEventListener('keydown', (e) => {
         if(e.keyCode !== 27) return;
         this.SET_MODAL_CLOSE();

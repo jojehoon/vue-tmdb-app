@@ -24,12 +24,19 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/search/:keyword',
+      path: '/search/movie/:keyword',
       name: 'Search',
       components: {
-        default: Search
-      }
-    }
+        default: MovieList
+      },
+      children: [
+        {
+          path: '',
+          component: MovieList
+        }
+      ]
+    },
+
   ]
 });
 

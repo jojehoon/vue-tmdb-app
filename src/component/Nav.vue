@@ -1,6 +1,7 @@
 <template>
   <nav class="nav">
-    <a class="logo__link" href="/" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></a>
+    <a href="/" ></a>
+    <router-link  class="logo__link" to="/" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></router-link>
     <ul class="nav__list">
       <li class="nav__item" v-for="(category, index) in categories" v-bind:key="index">
         <!-- <button class="nav__link" type="button" @click="fetchMoviesSort(category)">{{ category | toUpperCase }}</button> -->

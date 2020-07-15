@@ -4,7 +4,10 @@
     <Nav></Nav>
     <main class="main" @scroll="infiniteScroll">
       <transition name="fade">
-        <router-view :keyword="keyword" :key="this.$route.params.sort"></router-view>
+        <!-- <keep-alive> -->
+          <!-- <router-view :keyword="keyword" :key="this.$route.params.sort"></router-view> -->
+          <router-view :keyword="keyword" :key="this.$route.fullPath"></router-view>
+        <!-- </keep-alive> -->
       </transition>
     </main>
   </div>
@@ -51,6 +54,11 @@ export default {
       }
     },
   },
+
+  beforeRouteEnter(to, from, next){
+    console.dir(this.$route.path);
+    next();
+  }
 
 }
 </script>

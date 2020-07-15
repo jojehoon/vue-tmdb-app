@@ -79,8 +79,8 @@ export default {
     },
   },
 
+  // TODO 재검색시 아래 때문에 에러발생
   beforeRouteUpdate(to, from, next){
-    console.log(to.params.sort);
     this.FETCH_MOVIES_SORT(to.params.sort);
     next();
   },

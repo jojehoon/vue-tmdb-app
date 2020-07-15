@@ -1,7 +1,7 @@
-import Vue    from 'vue';
-import Vuex   from 'vuex';
-import Axios  from 'axios';
-import router from '../router';
+import Vue        from 'vue';
+import Vuex       from 'vuex';
+import Axios      from 'axios';
+import router     from '../router';
 import { apiKey } from '../auth';
 
 Vue.use(Vuex);
@@ -34,7 +34,7 @@ export default new Vuex.Store({
     SET_MOVIE         : (state, movie)       => state.movie = movie,
     SET_MOVIES        : (state, movies)      => state.movies = movies,
     SET_MOVIES_MORE   : (state, addedMovies) => state.movies.push(...addedMovies),
-    SET_MOVIES_SORT   : (state, sort)        => state.sort = sort,
+    SET_MOVIE_SORT    : (state, sort)        => state.sort = sort,
     SET_PAGE_ADD      : (state)              => state.page += 1,
   },
   
@@ -65,16 +65,15 @@ export default new Vuex.Store({
     },
 
     FETCH_MOVIES_SORT({commit, dispatch}, sort){
-      return dispatch('FETCH_MOVIES_INIT', commit('SET_MOVIES_SORT', sort))
+      return dispatch('FETCH_MOVIES_INIT', commit('SET_MOVIE_SORT', sort))
       .then(res => commit('SET_MOVIES', res.data.results));
     },
 
-    FETCH_SEARCH({state, commit, getters}, {keyword}){
+    FETCH_SEARCH({state, commit}, {keyword}){
+      router.push(`/search/movie/:${keyword}`);
       return Axios.get(`${state.urlSearch}?api_key=${state.apiKey}&language=${state.language}&page=${state.page}&include_adult=false&query=${keyword}`)
       .then(res => commit('SET_MOVIES', res.data.results))
-      .then(() => console.dir(getters.GET_MOVIES))
-      // .then(() => router.push(`/search/:${keyword}`));
-      // .then((res) => console.dir(res.data.results))
+      // .then(() => router.push(`/search/movie/:${keyword}`))
     },
 
   },
