@@ -38,7 +38,7 @@ export default {
 
   props: {
     categoryTitle: {
-      type: String,
+      type   : String,
       default: this.sort,
     },
   },
@@ -79,12 +79,26 @@ export default {
     },
   },
 
-  // TODO params가 sort일 때만 실행
-  beforeRouteUpdate(to, from, next){
+  // beforeRouteUpdate(to, from, next){
+  //   // console.dir('to: ', to.params);
+  //   // console.dir('from:', from.params);
+  //   console.log(to.params);
+  //   if(!to.params.sort) return next();
+  //   this.FETCH_MOVIES_SORT(to.params.sort);
+  //   next();
+  // },
+
+  created: function(){
     if(!this.$route.params.hasOwnProperty('sort')) return;
-    this.FETCH_MOVIES_SORT(to.params.sort);
-    next();
+    // console.log(this.$route.params.hasOwnProperty('sort'));
+    this.FETCH_MOVIES_SORT(this.$route.params.sort);
   },
+
+  updated: function(){
+    if(!this.$route.params.hasOwnProperty('sort')) return;
+    // console.log(this.$route.params.hasOwnProperty('sort'));
+    this.FETCH_MOVIES_SORT(this.$route.params.sort);
+  }
 
 }
 </script>

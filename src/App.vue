@@ -1,13 +1,10 @@
 <template>
   <div id="app" class="wrap">
-    <Header :keyword="keyword"></Header>
+    <Header></Header>
     <Nav></Nav>
     <main class="main" @scroll="infiniteScroll">
       <transition name="fade">
-        <!-- <keep-alive> -->
-          <!-- <router-view :keyword="keyword" :key="this.$route.params.sort"></router-view> -->
-          <router-view :keyword="keyword" :key="this.$route.fullPath"></router-view>
-        <!-- </keep-alive> -->
+        <router-view :keyword="keyword" :key="paramsKey"></router-view>
       </transition>
     </main>
   </div>
@@ -28,17 +25,12 @@ export default {
 
   data(){
     return {
-      listName: '',
       keyword: '',
-      test:'reewoo',
+      paramsKey: null,
     }
   },
 
-  created(){
-    this.FETCH_MOVIES();
-  },
-
-  methods: {
+    methods: {
     ...mapActions([
       'FETCH_MOVIES',
       'FETCH_MOVIES_MORE',
@@ -49,16 +41,27 @@ export default {
       if((window.innerHeight + window.scrollX) >= document.body.offsetHeight){
         this.loading = true;
         this.FETCH_MOVIES_MORE();
-      }else {
+      } else {
         this.loading = false;
       }
     },
   },
 
+  // NOTE params 변경에 대응
+  watch: {
+    $route(to, from){
+      this.paramsKey = from.params.hasOwnProperty('sort') ? this.$route.params.sort : this.$route.params.keyword;
+    }
+  },
+
+  created(){
+    this.FETCH_MOVIES();
+  },
+
   beforeRouteEnter(to, from, next){
     console.dir(this.$route.path);
     next();
-  }
+  },
 
 }
 </script>

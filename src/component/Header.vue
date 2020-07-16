@@ -7,7 +7,6 @@
 <script>
 import { mapActions } from 'vuex';
 export default {
-  // props: ['keyword'],
   data(){
     return {
       keyword: '',

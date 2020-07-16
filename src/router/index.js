@@ -6,39 +6,43 @@ import MovieList from '../component/MovieList.vue';
 
 Vue.use(VueRouter);
 
+const routes = [
+  { 
+    path: '/', 
+    name: 'Main',
+    components: {
+      default: Home
+    }
+  },
+  {
+    path: '/movie/:sort',
+    name: 'Movie',
+    components: {
+      default: MovieList
+    },
+    beforeEnter(to, from, next){
+      console.log('beforeRouteEnter')
+      next();
+    },
+  },
+  {
+    path: '/search/:keyword',
+    name: 'Search',
+    components: {
+      default: MovieList
+    },
+    children: [
+      {
+        path: '',
+        component: MovieList
+      }
+    ]
+  },
+];
+
 const router = new VueRouter({
   mode: 'history',
-  routes: [
-    { 
-      path: '/', 
-      name: 'Main',
-      components: {
-        default: Home
-      }
-    },
-    {
-      path: '/movie/:sort',
-      name: 'Movie',
-      components: {
-        default: MovieList
-      }
-    },
-    {
-      path: '/search/movie/:keyword',
-      name: 'Search',
-      components: {
-        default: MovieList
-      },
-      children: [
-        {
-          path: '',
-          component: MovieList
-        }
-      ]
-    },
-
-  ]
+  routes,
 });
-
 
 export default router;

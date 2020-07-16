@@ -62,6 +62,7 @@ export default new Vuex.Store({
     },
 
     FETCH_MOVIES_MORE({commit, dispatch}){
+      console.log('FETCH_MOVIES_MORE');
       return dispatch('FETCH_MOVIES_INIT', commit('SET_LOADER_TOGGLE'), commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MOVIES_MORE', res.data.results))
       .then(()  => commit('SET_LOADER_TOGGLE'));
@@ -77,17 +78,14 @@ export default new Vuex.Store({
     },
 
     FETCH_SEARCH({state, commit, dispatch}, {keyword}){
-      console.log(router.history.current.params.keyword, keyword);
-      console.dir(router.history.current);
       router.push({
-        path: `/search/movie/:${keyword}`,
+        path: `/search/:${keyword}`,
         params: {
           keyword: keyword
         }
       })
       return dispatch('FETCH_SEARCH_API', keyword)
       .then(res => commit('SET_MOVIES', res.data.results))
-      // .then(() => )
       .catch((err) => console.log(err.message))
     }
 
