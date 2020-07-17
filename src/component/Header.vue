@@ -1,20 +1,32 @@
 <template>
   <header class="header">
-    <input class="header__search" type="text" placeholder="search for a movie..." value="keyword" v-model.lazy="keyword" @keyup.enter="FETCH_SEARCH({keyword})">
+    <input class="header__search" type="text" placeholder="search for a movie..." v-model="keyword" @keyup.enter="FETCH_SEARCH">
   </header>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState ,mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   data(){
     return {
-      keyword: '',
     }
   },
+
   methods: {
+    ...mapMutations(['SET_KEYWORD']),
     ...mapActions(['FETCH_SEARCH']),
-  }
+  },
+
+  computed: {
+    keyword: {
+      get(){
+        return this.$store.state.keyword;
+      },
+      set(value){
+        this.$store.commit('SET_KEYWORD', value);
+      }
+    }
+  },
 }
 </script>
 

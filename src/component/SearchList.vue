@@ -1,15 +1,14 @@
 <template>
-  <section class="movies">
-    <h2 class="movies__category">{{ sort | toCapitalize(' Movies')}}</h2>
-    <Loader v-show="loader"></Loader>
-    <ul class="movies__list">
-      <li class="movies__item" v-for="movie in movies" :key="movie.id">
-        <a class="movies__link" @click="openModal(movie)">
-          <figure class="movies__poster">
-            <!-- <img class="movies__image" :src="movieImageUrl(movie)" :title="movie.title"> -->
-            <img class="movies__image" src="../assets/no-image.png" :title="movie.title">
+  <section class="search">
+    <h3 class="search__category">{{ 'Search'  | toCapitalize(' Movies')}}</h3>
+    <!-- <h3 class="search__keword">{{ keyword }} 검색결과</h3> -->
+    <ul class="search__list">
+      <li class="search__item" v-for="movie in search" :key="movie.id">
+        <a class="search__link" @click="openModal(movie)">
+          <figure class="search__poster">
+            <img class="search__image"  src="../assets/no-image.png">
           </figure>
-          <p class="movies__title">{{ movie.title }}</p>
+          <p class="search__title">{{ movie.title }}</p>
         </a>
       </li>
     </ul>
@@ -23,14 +22,12 @@
 
 <script>
 import MovieModal   from './MovieModal';
-import Loader       from './Loader';
 import { toCapitalize } from '../filter/index';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     MovieModal,
-    Loader,
   },
 
   filters: {
@@ -38,39 +35,32 @@ export default {
   },
 
   computed: {
-    ...mapState(['loader', 'movies', 'sort']),
+    ...mapState(['keyword', 'search']),
     ...mapGetters(['GET_MODAL']),
   },
 
   methods: {
-    ...mapActions(['FETCH_MOVIES_MORE', 'FETCH_MOVIES_SORT', 'FETCH_MOVIE']),
-
+    ...mapMutations(['SET_KEYWORD']),
+    ...mapActions(['FETCH_SEARCH', 'FETCH_MOVIE', 'FETCH_MOVIES_MORE']),
     openModal(movie){
-      this.FETCH_MOVIE({id : movie.id})
+      this.FETCH_MOVIE({id : movie.id});
     },
-
-    movieImageUrl(movie){
-      if(movie.poster_path){
-        return `https://image.tmdb.org/t/p/w370_and_h556_bestv2${movie.poster_path}`;
-      } else {
-        return '../../src/assets/no-image.png';
-      }
+    resetKeyword(){
+      this.SET_KEYWORD('');
     },
   },
 
-
-  beforeRouteUpdate(to, from, next){
-    this.FETCH_MOVIES_SORT(to.params.sort);
+  beforeRouteLeave(to, from, next){
+    this.resetKeyword();
     next();
-  },
-
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   @import '../scss/mixin.scss';
 
-  .movies {
+  .search {
     &__category {
       padding: 30px 30px 0;
       font-size: 18px;

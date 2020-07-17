@@ -1,8 +1,10 @@
 import Vue       from 'vue';
 import VueRouter from 'vue-router';
 import Home      from '../views/Home.vue';
-import Search    from '../views/Search.vue';
+// import Search    from '../views/Search.vue';
 import MovieList from '../component/MovieList.vue';
+import SearchList from '../component/SearchList.vue';
+import store from '../store/index';
 
 Vue.use(VueRouter);
 
@@ -20,21 +22,23 @@ const routes = [
     components: {
       default: MovieList
     },
-    beforeEnter(to, from, next){
-      console.log('beforeRouteEnter')
-      next();
-    },
+    // beforeEnter(to, from, next){
+    //   console.log('beforeEnter');
+    //   store.dispatch('FETCH_MOVIES_SORT', to.params.sort);
+    //   next();
+    // }
   },
   {
     path: '/search/:keyword',
     name: 'Search',
     components: {
-      default: MovieList
+      default: SearchList
     },
     children: [
       {
         path: '',
-        component: MovieList
+        name: 'Search',
+        component: SearchList
       }
     ]
   },

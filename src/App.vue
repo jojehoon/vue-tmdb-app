@@ -31,10 +31,7 @@ export default {
   },
 
     methods: {
-    ...mapActions([
-      'FETCH_MOVIES',
-      'FETCH_MOVIES_MORE',
-    ]),
+    ...mapActions(['FETCH_MOVIES', 'FETCH_MOVIES_MORE']),
 
     // FIXME 수정 필요
     infiniteScroll(){
@@ -56,11 +53,6 @@ export default {
 
   created(){
     this.FETCH_MOVIES();
-  },
-
-  beforeRouteEnter(to, from, next){
-    console.dir(this.$route.path);
-    next();
   },
 
 }

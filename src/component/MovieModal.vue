@@ -226,6 +226,7 @@
     transition: opacity .5s
   }
   .modal-enter, .modal-leave-to {
-    opacity: 0
+    opacity: 0;
+    transition: opacity .5s
   }
 </style>
