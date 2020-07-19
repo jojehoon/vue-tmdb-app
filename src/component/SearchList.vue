@@ -6,29 +6,24 @@
       <li class="search__item" v-for="movie in search" :key="movie.id">
         <a class="search__link" @click="openModal(movie)">
           <figure class="search__poster">
-            <img class="search__image"  src="../assets/no-image.png">
+            <img class="search__image" :src="getMovieImageUrl(movie)" :title="movie.title">
+            <!-- <img class="search__image"  src="../assets/no-image.png"> -->
           </figure>
           <p class="search__title">{{ movie.title }}</p>
         </a>
       </li>
     </ul>
-    <button class="button" @click="FETCH_MOVIES_MORE">Load More</button>
-
-    <transition name="fade">
-      <MovieModal v-show="GET_MODAL"></MovieModal>
-    </transition>
+    <button class="button__more" @click="FETCH_MORE">Load More</button>
   </section>
 </template>
 
 <script>
-import MovieModal   from './MovieModal';
+import { getMovieImageUrl } from '../mixin/index';
 import { toCapitalize } from '../filter/index';
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
-  components: {
-    MovieModal,
-  },
+  mixins: [getMovieImageUrl],
 
   filters: {
     toCapitalize,
@@ -36,22 +31,18 @@ export default {
 
   computed: {
     ...mapState(['keyword', 'search']),
-    ...mapGetters(['GET_MODAL']),
   },
 
   methods: {
-    ...mapMutations(['SET_KEYWORD']),
-    ...mapActions(['FETCH_SEARCH', 'FETCH_MOVIE', 'FETCH_MOVIES_MORE']),
+    ...mapMutations(['SET_CATEGORY', 'SET_RESET_STATE']),
+    ...mapActions(['FETCH_SEARCH', 'FETCH_MOVIE', 'FETCH_MORE']),
     openModal(movie){
       this.FETCH_MOVIE({id : movie.id});
-    },
-    resetKeyword(){
-      this.SET_KEYWORD('');
     },
   },
 
   beforeRouteLeave(to, from, next){
-    this.resetKeyword();
+    this.SET_RESET_STATE();
     next();
   }
 }
@@ -61,11 +52,27 @@ export default {
   @import '../scss/mixin.scss';
 
   .search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     &__category {
-      padding: 30px 30px 0;
+      display: flex;
+      align-self: stretch;
+      justify-content: flex-start;
+      padding: 30px 10px 15px;
       font-size: 18px;
       font-weight: 300;
       color: #081c24;
+      @media screen and (min-width: 768px){
+        padding: 30px 15px 15px;
+      }
+      @media screen and (min-width: 1024px){
+        padding: 30px 25px 5px;
+      }
+      @media screen and (min-width: 1200px){
+        padding: 30px 30px 0px;
+      }
     }
     &__list {
       display: flex;
@@ -74,18 +81,29 @@ export default {
       justify-content: space-around;
     }
     &__item {
-      width: 20%;
-      padding: 30px;
+      width: 50%;
+      padding: 15px 10px;
+      @media screen and (min-width: 768px){
+        padding: 15px;
+      }
+      @media screen and (min-width: 1024px){
+        width: 25%;
+        padding: 25px;
+      }
+      @media screen and (min-width: 1200px){
+        width: 20%;
+        padding: 30px;
+      }
     }
     &__link {
       cursor: pointer;
     }
     &__link:hover {
-      & .movies__poster {
+      & .search__poster {
         transform: scale(1.03);
         box-shadow: 0 0 10px rgba(8, 28, 36, 0.1);
       }
-      & .movies__title {
+      & .search__title {
         color: #081c24;
       }
     }

@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body, button, figcaption, h1, h2, h3, input, li {
+  font-family: 'Roboto', 'sans-serf';
+}
+
+body {
+}
+
+button {
+  border: none;
+  background: none;
+  &:focus {
+    outline: none;
+  }
+}
+
+fieldset {
+  border: none;
+}
+
+hr {
+  display: none;
+}
+
+ol, ul, li {
+  list-style: none;
+}

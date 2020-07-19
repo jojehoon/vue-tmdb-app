@@ -17,7 +17,7 @@ const routes = [
     }
   },
   {
-    path: '/movie/:sort',
+    path: '/movie/:category',
     name: 'Movie',
     components: {
       default: MovieList

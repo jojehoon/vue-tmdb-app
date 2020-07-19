@@ -1,0 +1,35 @@
+.is-scroll-blocking {
+  overflow-y: hidden;
+  padding-right: 17px;
+}
+
+.a11y {
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+.button__more {
+  display: inline-flex;
+  margin-bottom: 30px;
+  padding: 5px 20px 4px 20px;
+  border: 1px solid #081c24;
+  background: transparent;
+  font-weight: 300;
+  font-size: 11px;
+  color: #081c24;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  line-height: 2;
+  text-transform: uppercase;
+  outline: none;
+  transition: background 0.5s ease, color 0.5s ease;
+  &:hover{
+    background: #081c24;
+    color: #fff;
+  }
+}

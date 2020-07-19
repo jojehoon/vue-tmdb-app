@@ -2,172 +2,45 @@
   <div id="app" class="wrap">
     <Header></Header>
     <Nav></Nav>
-    <main class="main" @scroll="infiniteScroll">
-      <transition name="fade">
-        <router-view :keyword="keyword" :key="paramsKey"></router-view>
-      </transition>
-    </main>
+    <Main></Main>
+    <Modal v-show="GET_MODAL"></Modal>
   </div>
 </template>
 
 <script>
 import Header         from './component/Header';
+import Main           from './component/Main';
+import Modal          from './component/Modal';
 import Nav            from './component/Nav';
-import { mapActions } from 'vuex';
+import { mapGetters }   from 'vuex';
 
 export default {
   name: 'app',
 
   components: {
     Header,
+    Main,
+    Modal,
     Nav,
   },
 
-  data(){
-    return {
-      keyword: '',
-      paramsKey: null,
-    }
+  computed: {
+    ...mapGetters(['GET_MODAL']),
   },
-
-    methods: {
-    ...mapActions(['FETCH_MOVIES', 'FETCH_MOVIES_MORE']),
-
-    // FIXME 수정 필요
-    infiniteScroll(){
-      if((window.innerHeight + window.scrollX) >= document.body.offsetHeight){
-        this.loading = true;
-        this.FETCH_MOVIES_MORE();
-      } else {
-        this.loading = false;
-      }
-    },
-  },
-
-  // NOTE params 변경에 대응
-  watch: {
-    $route(to, from){
-      this.paramsKey = from.params.hasOwnProperty('sort') ? this.$route.params.sort : this.$route.params.keyword;
-    }
-  },
-
-  created(){
-    this.FETCH_MOVIES();
-  },
-
 }
 </script>
 
 // 공통으로 뺄 것
 <style lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
+@import './scss/reset.scss';
+@import './scss/common.scss';
+</style>
 
-*, *:before, *:after {
-  box-sizing: border-box;
-}
-
-body, button, figcaption, h1, h2, h3, input, li {
-  font-family: 'Roboto', 'sans-serf';
-}
-
-body {
-}
-
-button {
-  border: none;
-  background: none;
-  &:focus {
-    outline: none;
-  }
-}
-
-fieldset {
-  border: none;
-}
-
-hr {
-  display: none;
-}
-
-ol, ul, li {
-  list-style: none;
-}
-
-.is-scroll-blocking {
-  overflow-y: hidden;
-  padding-right: 17px;
-}
-
-.a11y {
-  overflow: hidden;
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  white-space: nowrap;
-}
-
-.button{
-  display: inline-block;
-  padding: 5px 20px 4px 20px;
-  border: 1px solid #081c24;
-  background: transparent;
-  font-weight: 300;
-  font-size: 11px;
-  color: #081c24;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  line-height: 2;
-  text-transform: uppercase;
-  outline: none;
-  transition: background 0.5s ease, color 0.5s ease;
-  &:hover{
-    background: #081c24;
-    color: #fff;
-  }
-}
-
+<style lang="scss" scoped>
 .wrap {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  height: 100vh;
   padding-left: 95px;
-}
-
-.main {
-  background: #f8f8f8;
-  padding: 0 30px;
-}
-.category {
-
-}
-.category__title {
-  margin-left: 50px;
-  font-weight: 300;
-  font-size: 18px;
-  color: rgb(222, 219, 214);
-}
-
-
-.loading {
-  width: 100%;
-  height: 1000px;
-  background-color: hotpink;
-}
-
-// router view transition
-.fade-enter-active, .fade-leave-active {
-  transition-property: opacity;
-  transition-duration: 0.5s;
-}
-.fade-enter-active {
-  transition-delay: 0.5s;
-}
-.fade-enter, .fade-leave-active {
-  opacity: 0
 }
 </style>

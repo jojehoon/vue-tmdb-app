@@ -1,35 +1,33 @@
 <template>
   <section class="movies">
-    <h2 class="movies__category">{{ sort | toCapitalize(' Movies')}}</h2>
+    <h2 class="movies__category">{{ category | toCapitalize(' Movies')}}</h2>
     <Loader v-show="loader"></Loader>
     <ul class="movies__list">
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
         <a class="movies__link" @click="openModal(movie)">
           <figure class="movies__poster">
-            <!-- <img class="movies__image" :src="movieImageUrl(movie)" :title="movie.title"> -->
-            <img class="movies__image" src="../assets/no-image.png" :title="movie.title">
+            <img class="movies__image" :src="getMovieImageUrl(movie)" :title="movie.title">
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
         </a>
       </li>
     </ul>
-    <button class="button" @click="FETCH_MOVIES_MORE">Load More</button>
-
-    <transition name="fade">
-      <MovieModal v-show="GET_MODAL"></MovieModal>
-    </transition>
+    <button class="button__more" @click="FETCH_MORE">Load More</button>
   </section>
 </template>
 
 <script>
-import MovieModal   from './MovieModal';
 import Loader       from './Loader';
+import { getMovieImageUrl } from '../mixin/index';
 import { toCapitalize } from '../filter/index';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
+import store from '../store/index';
+import router from '../router/index';
 
 export default {
+  mixins: [getMovieImageUrl],
+  
   components: {
-    MovieModal,
     Loader,
   },
 
@@ -38,30 +36,31 @@ export default {
   },
 
   computed: {
-    ...mapState(['loader', 'movies', 'sort']),
-    ...mapGetters(['GET_MODAL']),
+    ...mapState(['loader', 'movies', 'category']),
   },
 
   methods: {
-    ...mapActions(['FETCH_MOVIES_MORE', 'FETCH_MOVIES_SORT', 'FETCH_MOVIE']),
+    ...mapMutations(['SET_RESET_STATE']),
+    ...mapActions(['FETCH_MORE', 'FETCH_CATEGORY', 'FETCH_MOVIE', 'FETCH_MOVIES']),
 
     openModal(movie){
       this.FETCH_MOVIE({id : movie.id})
     },
-
-    movieImageUrl(movie){
-      if(movie.poster_path){
-        return `https://image.tmdb.org/t/p/w370_and_h556_bestv2${movie.poster_path}`;
-      } else {
-        return '../../src/assets/no-image.png';
-      }
-    },
   },
 
+  beforeRouteEnter(to, from, next){
+    store.dispatch('FETCH_CATEGORY', to.params.category);
+    next();
+  },
 
   beforeRouteUpdate(to, from, next){
-    this.FETCH_MOVIES_SORT(to.params.sort);
+    this.FETCH_CATEGORY(to.params.category);
     next();
+  },
+
+  beforeRouteLeave(to, from, next){
+      this.SET_RESET_STATE();
+      next();
   },
 
 }
@@ -71,11 +70,27 @@ export default {
   @import '../scss/mixin.scss';
 
   .movies {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     &__category {
-      padding: 30px 30px 0;
+      display: flex;
+      align-self: stretch;
+      justify-content: flex-start;
+      padding: 30px 10px 15px;
       font-size: 18px;
       font-weight: 300;
       color: #081c24;
+      @media screen and (min-width: 768px){
+        padding: 30px 15px 15px;
+      }
+      @media screen and (min-width: 1024px){
+        padding: 30px 25px 5px;
+      }
+      @media screen and (min-width: 1200px){
+        padding: 30px 30px 0px;
+      }
     }
     &__list {
       display: flex;
@@ -84,8 +99,19 @@ export default {
       justify-content: space-around;
     }
     &__item {
-      width: 20%;
-      padding: 30px;
+      width: 50%;
+      padding: 15px 10px;
+      @media screen and (min-width: 768px){
+        padding: 15px;
+      }
+      @media screen and (min-width: 1024px){
+        width: 25%;
+        padding: 25px;
+      }
+      @media screen and (min-width: 1200px){
+        width: 20%;
+        padding: 30px;
+      }
     }
     &__link {
       cursor: pointer;

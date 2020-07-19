@@ -32,9 +32,20 @@ export default {
 
 <style lang="scss" scoped>
   .header {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 75px;
-    padding: 0 60px;
+    padding: 0 25px;
+    @media screen and (min-width: 768px){
+      padding: 0 45px;
+    }
+    @media screen and (min-width: 1024px){
+      padding: 0 55px;
+    }
+    @media screen and (min-width: 1200px){
+      padding: 0 60px;
+    }
     &__search {
       display: flex;
       width: 100%;
