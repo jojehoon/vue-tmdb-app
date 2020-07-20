@@ -41,6 +41,9 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding-left: 95px;
+  padding-left: 0;
+  @media screen and (min-width: 768px) {
+    padding-left: 95px;
+  }
 }
 </style>

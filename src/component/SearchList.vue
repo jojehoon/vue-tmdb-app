@@ -3,11 +3,11 @@
     <h3 class="search__category">{{ 'Search'  | toCapitalize(' Movies')}}</h3>
     <!-- <h3 class="search__keword">{{ keyword }} 검색결과</h3> -->
     <ul class="search__list">
-      <li class="search__item" v-for="movie in search" :key="movie.id">
+      <li class="search__item" v-for="movie in movies" :key="movie.id">
         <a class="search__link" @click="openModal(movie)">
           <figure class="search__poster">
             <img class="search__image" :src="getMovieImageUrl(movie)" :title="movie.title">
-            <!-- <img class="search__image"  src="../assets/no-image.png"> -->
+            <!-- <img class="search__image" src="../assets/no-image.png"> -->
           </figure>
           <p class="search__title">{{ movie.title }}</p>
         </a>
@@ -30,12 +30,12 @@ export default {
   },
 
   computed: {
-    ...mapState(['keyword', 'search']),
+    ...mapState(['keyword', 'movies']),
   },
 
   methods: {
     ...mapMutations(['SET_CATEGORY', 'SET_RESET_STATE']),
-    ...mapActions(['FETCH_SEARCH', 'FETCH_MOVIE', 'FETCH_MORE']),
+    ...mapActions(['FETCH_MOVIE', 'FETCH_MORE']),
     openModal(movie){
       this.FETCH_MOVIE({id : movie.id});
     },

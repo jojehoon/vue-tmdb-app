@@ -1,13 +1,13 @@
 # vue-movies
 
 ## Todo-List
-* minxin 생성
-* vuex's actions more 변경
-* 명명 변경 sort > category
-
 * 검색 결과 없음
 * 404
 * 검색 필터
+
+**2020-07-20**   
+* vuex search 관련 삭제
+* api 추가 요청시 중복 영화 포함되는 이슈 처리
 * 총결과 수
 
 > A Vue.js project

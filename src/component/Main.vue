@@ -19,13 +19,12 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
-  width: calc(100% + 95px);
+  width: 100%;
   padding: 0 30px;
+  margin-top: 50px;
   background: #f8f8f8;
-  transform: translateX(-95px);
   @media screen and (min-width: 768px){
-    width: 100%;
-    transform: translateX(0);
+    margin-top: 0;
   }
 }
 

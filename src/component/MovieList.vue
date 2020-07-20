@@ -1,12 +1,13 @@
 <template>
   <section class="movies">
-    <h2 class="movies__category">{{ category | toCapitalize(' Movies')}}</h2>
+    <h2 class="movies__category">{{ category | toCapitalize(' Movies')}} <span class="movies__results">{{ results | toNumberFormat }} results</span></h2>
     <Loader v-show="loader"></Loader>
     <ul class="movies__list">
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
         <a class="movies__link" @click="openModal(movie)">
           <figure class="movies__poster">
-            <img class="movies__image" :src="getMovieImageUrl(movie)" :title="movie.title">
+            <!-- <img class="movies__image" :src="getMovieImageUrl(movie)" :title="movie.title"> -->
+            <img class="movies__image" src="../assets/no-image.png" :title="movie.title">
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
         </a>
@@ -19,7 +20,7 @@
 <script>
 import Loader       from './Loader';
 import { getMovieImageUrl } from '../mixin/index';
-import { toCapitalize } from '../filter/index';
+import { toCapitalize, toNumberFormat } from '../filter/index';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import store from '../store/index';
 import router from '../router/index';
@@ -33,10 +34,11 @@ export default {
 
   filters: {
     toCapitalize,
+    toNumberFormat,
   },
 
   computed: {
-    ...mapState(['loader', 'movies', 'category']),
+    ...mapState(['category', 'loader', 'movies', 'results']),
   },
 
   methods: {
@@ -76,8 +78,9 @@ export default {
 
     &__category {
       display: flex;
+      align-items: baseline;
       align-self: stretch;
-      justify-content: flex-start;
+      justify-content: space-between;
       padding: 30px 10px 15px;
       font-size: 18px;
       font-weight: 300;
@@ -91,6 +94,12 @@ export default {
       @media screen and (min-width: 1200px){
         padding: 30px 30px 0px;
       }
+    }
+    &__results {
+      font-size: 12px;
+      font-weight: 300;
+      color: #808a8e;
+      letter-spacing: 0.5px;
     }
     &__list {
       display: flex;
@@ -132,8 +141,9 @@ export default {
       transition: all .5s ease;
     }
     &__image {
-      width: 100%;
-      animation: loadImage 1s ease;
+      max-width: 100%;
+      height: auto;
+      animation: loadImage 0.5s ease;
     }
     &__title {
       width: 100%;
