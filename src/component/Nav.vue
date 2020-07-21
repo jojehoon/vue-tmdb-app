@@ -1,6 +1,6 @@
 <template>
   <nav class="nav">
-    <a class="logo__link" href="/" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></a>
+    <router-link class="logo__link" to="/" title="The Movie DB"><img class="logo__image" src="../assets/logo.svg"></router-link>
     <button class="nav__hamburger" :class="{ 'is-active' : isActive }" type="button" @click="toggleNavHamburger"><i class="nav__icon"><span class="a11y">Navigation Only Mobile</span></i></button>
     <ul class="nav__list" :class="{ 'is-active' : isActive }">
       <li class="nav__item" v-for="(category, index) in categories" v-bind:key="index">
@@ -159,14 +159,14 @@ export default {
     color: #869094;
     cursor: pointer;
     text-decoration: none;
-    transition: all 0.5s ease;
+    transition: all 0.5s ease7;
     @media screen and (min-width: 768px){
       width: 95px;
     }
-  }
-  .router-link-active {
-    background: #f8f8f8;
-    color: #081c24;    
+    &.router-link-active {
+      background: #f8f8f8;
+      color: #081c24;    
+    }
   }
 }
 
@@ -185,7 +185,7 @@ export default {
     }
   }
   &__image {
-    width: 60%;
+    width: 70%;
   }
 }
 </style>

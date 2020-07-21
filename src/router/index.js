@@ -22,11 +22,6 @@ const routes = [
     components: {
       default: MovieList
     },
-    // beforeEnter(to, from, next){
-    //   console.log('beforeEnter');
-    //   store.dispatch('FETCH_MOVIES_SORT', to.params.sort);
-    //   next();
-    // }
   },
   {
     path: '/search/:keyword',
@@ -34,13 +29,6 @@ const routes = [
     components: {
       default: SearchList
     },
-    children: [
-      {
-        path: '',
-        name: 'Search',
-        component: SearchList
-      }
-    ]
   },
 ];
 

@@ -12,9 +12,13 @@
 </template>
 
 <script>
-  export default {
-    
+export default {
+
+  beforeRouteLeave(to, from, next){
+  console.log('beforeRouteLeave');
+  next();
   }
+}
 </script>
 
 <style lang="scss" scoped>

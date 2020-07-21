@@ -18,6 +18,7 @@ export default new Vuex.Store({
                   },
     loader     : false,
     keyword    : '',
+    message    : '',
     modal      : false,
     movie      : {},
     movies     : [],
@@ -43,12 +44,13 @@ export default new Vuex.Store({
     SET_CATEGORY      : (state, value) => state.category = value,
     SET_LOADER_TOGGLE : (state)        => state.loading = state.loading ? false : true,
     SET_KEYWORD       : (state, value) => state.keyword = value,
+    SET_MESSAGE       : (state, value) => state.message = value,
     SET_MODAL         : (state)        => state.modal = state.modal ? false : true,
     SET_MOVIE         : (state, value) => state.movie = value,
     SET_MOVIES        : (state, value) => state.movies = value,
     SET_MORE          : (state, addedMovies) => state.movies = [...state.movies, ...addedMovies],
     SET_PAGE_ADD      : (state)        => state.page += 1,
-    SET_RESULTS       : (state, value) => state.results = value,
+    SET_RESULT        : (state, value) => state.results = value,
     SET_RESET_PAGE    : (state)        => state.page = 1,
     SET_RESET_STATE   : (state)        => {
                                             state.movies = [];
@@ -92,15 +94,13 @@ export default new Vuex.Store({
     // NOTE sort_by=created_at.desc 쿼리 삽입으로 중복 영화 해결
     FETCH_MORE({commit, dispatch}){
       let api  = null;
-      let stateName = null;
-      let routeName = router.history.current.name;
-
-      if(routeName === 'Movie'){
-        api = 'FETCH_API_MOVIES';
-        stateName = 'movies'
-      } else if(routeName === 'Search'){
-        api = 'FETCH_API_SEARCH';
-        stateName = 'search';
+      switch (router.history.current.name) {
+        case 'Movie':
+          api = 'FETCH_API_MOVIES';
+          break;
+        case 'Search':
+          api = 'FETCH_API_SEARCH';
+          break;
       }
       return dispatch(api, commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MORE', res.data.results))
@@ -111,7 +111,7 @@ export default new Vuex.Store({
       return dispatch('FETCH_API_MOVIES', commit('SET_CATEGORY', category))
       .then((res) => {
         commit('SET_MOVIES', res.data.results)
-        commit('SET_RESULTS', res.data.total_results) 
+        commit('SET_RESULT', res.data.total_results) 
       });
     },
 
@@ -125,16 +125,25 @@ export default new Vuex.Store({
       .catch((err) => console.log(err.message))
     },
 
+    FETCH_SUGGETION_RESULT({commit}, results){
+      if(results.length >= 1) commit('SET_SUGGETION', results)
+      commit('SET_MESSAGE', 'No Results Found');
+    },
+
     FETCH_SUGGETION({state, commit, dispatch}){
-      console.log(state.keyword.length);
-      if(state.keyword === ''  || state.keyword.search(/\s/) != -1){
+      if(state.keyword === ''){
+        commit('SET_SUGGETION', []);
+        commit('SET_MESSAGE', '');
+      }
+      else if(!state.keyword.replace(/\s/g, '').length){
         commit('SET_SUGGETION', [])
-      } else{
+        commit('SET_MESSAGE', 'No Results Found');
+      }
+      else {
         dispatch('FETCH_API_SEARCH', commit('SET_KEYWORD', state.keyword))
-        .then(res => commit('SET_SUGGETION', res.data.results))
+        .then(res => dispatch('FETCH_SUGGETION_RESULT', res.data.results.slice(0, 5)))
         .catch(err => alert(err.message));
       }
     },
-
   },
 });

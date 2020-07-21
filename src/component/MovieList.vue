@@ -6,7 +6,7 @@
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
         <a class="movies__link" @click="openModal(movie)">
           <figure class="movies__poster">
-            <!-- <img class="movies__image" :src="getMovieImageUrl(movie)" :title="movie.title"> -->
+            <!-- <img class="movies__image" :src="getMovieImageUrl(movie, 370, 556)" :title="movie.title"> -->
             <img class="movies__image" src="../assets/no-image.png" :title="movie.title">
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
