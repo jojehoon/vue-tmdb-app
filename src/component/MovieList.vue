@@ -6,14 +6,14 @@
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
         <a class="movies__link" @click="openModal(movie)">
           <figure class="movies__poster">
-            <!-- <img class="movies__image" :src="getMovieImageUrl(movie, 370, 556)" :title="movie.title"> -->
-            <img class="movies__image" src="../assets/no-image.png" :title="movie.title">
+            <img v-lazyload class="movies__image" :data-src="getMovieImageUrl(movie, 370, 556)" :title="movie.title">
+            <!-- <img class="movies__image" src="../assets/no-image.png" :title="movie.title"> -->
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
         </a>
       </li>
     </ul>
-    <button class="button__more" @click="FETCH_MORE">Load More</button>
+    <button class="button__more" @click.stop="FETCH_MORE">Load More</button>
   </section>
 </template>
 
@@ -24,9 +24,14 @@ import { toCapitalize, toNumberFormat } from '../filter/index';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import store from '../store/index';
 import router from '../router/index';
+import { lazyLoad }                    from '../directive/index';
 
 export default {
   mixins: [getMovieImageUrl],
+
+  directives: {
+    'lazyload': lazyLoad,
+  },
   
   components: {
     Loader,

@@ -4,6 +4,8 @@ import store from './store/index';
 import router from './router/index';
 import Axios from 'axios';
 
+Vue.config.productionTip = false;
+
 Vue.prototype.$axios  = Axios;
 
 new Vue({

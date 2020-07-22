@@ -77,7 +77,7 @@ export default new Vuex.Store({
     },
 
     FETCH_API_SEARCH({state}){
-      return Axios.get(`${state.url.search}?api_key=${state.apiKey}&language=en-US&page=${state.page}&include_adult=false&query=${state.keyword}`)
+      return Axios.get(`${state.url.search}?api_key=${state.apiKey}&language=en-US&include_adult=false&query=${state.keyword}`)
     },
 
     FETCH_MOVIE({commit, dispatch}, {id}){
@@ -122,6 +122,7 @@ export default new Vuex.Store({
       })
       return dispatch('FETCH_API_SEARCH', commit('SET_KEYWORD', state.keyword))
       .then(res => commit('SET_MOVIES', res.data.results))
+      .then(() => commit('SET_SUGGeTION', []))
       .catch((err) => console.log(err.message))
     },
 

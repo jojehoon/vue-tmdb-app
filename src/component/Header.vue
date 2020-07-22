@@ -2,13 +2,13 @@
   <header class="header">
     <input class="header__search" type="text" placeholder="search for a movie..." 
       v-model="keyword" 
-      @focus="isActive = true" 
-      @blur="isActive = false" 
+      @focus="isFocus = true" 
+      @blur="isFocus = false" 
       @keyup="FETCH_SUGGETION" 
       @keyup.down="$event.target.nextElementSibling.focus()"
-      @keyup.enter="FETCH_SEARCH" 
+      @keyup.enter="fetchSearch" 
     >
-    <ul class="suggetion__list" :class="{'is-active' : isActive}"  tabindex="0" @focus="isActive = true" @keyup.capture.down="setFocus($event.target.firstElementChild)">
+    <ul class="suggetion__list" :class="{'is-active' : isFocus}"  tabindex="0" @focus="isFocus = true" @keyup.capture.down="setFocus($event.target.firstElementChild)">
       <!-- NOTE no-results-found가 항상 먼저 보임 => 비동기로 해결 -->
       <li class="suggetion__item"      v-if="GET_SUGGETION.length == 0 && keyword.length == 0">{{ message }}</li>
       <li class="suggetion__item" v-else-if="GET_SUGGETION.length == 0 && keyword.length >= 1">{{ message }}</li>
@@ -21,7 +21,8 @@
       >
         <a class="suggetion__link" @click="openModal(movie)">
           <figure class="suggetion__info">
-            <img class="suggetion__image" :src="getMovieImageUrl(movie, 220, 330)" width="50" height="75">
+            <img class="suggetion__image" src="../assets/no-image.png" width="50" height="75">
+            <!-- <img class="suggetion__image" :src="getMovieImageUrl(movie, 220, 330)" width="50" height="75"> -->
             <figcaption class="suggetion__text">
               <strong class="suggetion__title">{{ movie.title }}</strong>
               <span class="suggetion__date">{{ movie.release_date }}</span> 
@@ -42,13 +43,19 @@ export default {
 
   data(){
     return {
-      isActive: false,
+      isFocus: false,
     }
   },
 
   methods: {
-    ...mapMutations(['SET_KEYWORD']),
+    ...mapMutations(['SET_KEYWORD', 'SET_SUGGETION']),
     ...mapActions(['FETCH_SUGGETION', 'FETCH_SEARCH', 'FETCH_MOVIE']),
+    fetchSearch(){
+      this.FETCH_SEARCH();
+      this.isFocus = false;
+      this.keyword = '';
+      // this.SET_SUGGETION([]);
+    },
     setFocus(targetElement){
       if(targetElement) targetElement.focus();
       else {
@@ -84,6 +91,7 @@ export default {
     flex-direction: column;
     position: fixed;
     top: 0;
+    z-index: 1;
     width: 100%;
     height: 50px;
     padding: 0 70px;
