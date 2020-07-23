@@ -33,7 +33,9 @@ export const lazyLoad = {
       const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
           if(entry.isIntersecting){  // 감지대상이 교차영역에 진입 할 경우
-            loadImage();  // 교챠영역 들어올 경우 이미지 로딩
+            setTimeout(() => {
+              loadImage();  // 교챠영역 들어올 경우 이미지 로딩
+            }, 3000)
             observer.unobserve(el); // 이미지 로딩 이후로는 관찰할 필요가 없다
           }
         });

@@ -1,7 +1,6 @@
 import Vue       from 'vue';
 import VueRouter from 'vue-router';
 import Home      from '../views/Home.vue';
-// import Search    from '../views/Search.vue';
 import MovieList from '../component/MovieList.vue';
 import SearchList from '../component/SearchList.vue';
 import store from '../store/index';

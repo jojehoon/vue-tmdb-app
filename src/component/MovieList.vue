@@ -1,7 +1,15 @@
 <template>
   <section class="movies">
-    <h2 class="movies__category">{{ category | toCapitalize(' Movies')}} <span class="movies__results">{{ results | toNumberFormat }} results</span></h2>
     <Loader v-show="loader"></Loader>
+    <div class="filters">
+      <button class="button__sort" type="button" data-sort="original_title.asc"  @click="sortMovies">제목 오름차순</button>
+      <button class="button__sort" type="button" data-sort="original_title.desc" @click="sortMovies">제목 내림차순</button>
+      <button class="button__sort" type="button" data-sort="release_date.asc"    @click="sortMovies">상영일 오름차순</button>
+      <button class="button__sort" type="button" data-sort="release_date.desc"   @click="sortMovies">상영일 내림차순</button>
+      <button class="button__sort" type="button" data-sort="popularity.asc"      @click="sortMovies">인기도 오름차순</button>
+      <button class="button__sort" type="button" data-sort="popularity.desc"     @click="sortMovies">인기도 내림차순</button>
+    </div>
+    <h2 class="movies__category">{{ category | toCapitalize(' Movies')}} <span class="movies__results">{{ results | toNumberFormat }} results</span></h2>
     <ul class="movies__list">
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
         <a class="movies__link" @click="openModal(movie)">
@@ -47,16 +55,30 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['SET_RESET_STATE']),
-    ...mapActions(['FETCH_MORE', 'FETCH_CATEGORY', 'FETCH_MOVIE', 'FETCH_MOVIES']),
+    ...mapMutations(['SET_LOADER', 'SET_RESET_STATE']),
+    ...mapActions(['FETCH_CATEGORY', 'FETCH_FILTER', 'FETCH_MORE', 'FETCH_MOVIE', 'FETCH_MOVIES']),
 
     openModal(movie){
       this.FETCH_MOVIE({id : movie.id})
     },
+
+    sortMovies(e){
+      const sortBy = e.target.dataset.sort;
+      // console.log(e.target.dataset.sort);
+      // console.log(sortBy);
+      this.FETCH_FILTER(sortBy);
+    },
+  },
+
+  updated(){
+    // setTimeout(() => {
+    //   store.commit('SET_LOADER', false);
+    // }, 3000)
   },
 
   beforeRouteEnter(to, from, next){
     store.dispatch('FETCH_CATEGORY', to.params.category);
+    // store.commit('SET_LOADER', true);
     next();
   },
 
@@ -66,8 +88,8 @@ export default {
   },
 
   beforeRouteLeave(to, from, next){
-      this.SET_RESET_STATE();
-      next();
+    this.SET_RESET_STATE();
+    next();
   },
 
 }

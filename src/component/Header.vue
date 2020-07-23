@@ -54,7 +54,6 @@ export default {
       this.FETCH_SEARCH();
       this.isFocus = false;
       this.keyword = '';
-      // this.SET_SUGGETION([]);
     },
     setFocus(targetElement){
       if(targetElement) targetElement.focus();

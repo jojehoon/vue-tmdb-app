@@ -24,11 +24,74 @@ export default new Vuex.Store({
     movies     : [],
     page       : 1,
     results    : 0,
+    sortBy     : {
+                  default : 'created_at.desc',
+                  popularity: {
+                    asc  : 'popularity.asc',
+                    desc : 'popularity.desc',
+                  },
+                  release_date: {
+                    asc  : 'release_date.asc',
+                    desc : 'release_date.desc',
+                  },
+                  revenue : {
+                    asc  : 'revenue.asc',
+                    desc : 'revenue.desc',
+                  },
+                  primary_release_date : {
+                    asc : 'primary_release_date.asc',
+                    desc: 'primary_release_date.desc',
+                  },
+                  original_title: {
+                    asc : 'original_title.asc',
+                    desc: 'original_title.desc',
+                  },
+                  vote_average: {
+                    asc : 'vote_average.asc',
+                    desc: 'vote_average.desc',
+                  },
+                  vote_count: {
+                    asc : 'vote_count.asc',
+                    desc: 'vote_count.desc',
+                  },
+    },
+    sortForm    : {
+                  'air_date.gte'                : '',
+                  'air_date.lte'                : '2021-01-23',
+                  'certification'               : '',
+                  'certification_country'       : 'KR',
+                  'debug'                       : '',
+                  'first_air_date.gte'          : '',
+                  'first_air_date.lte'          : '',
+                  'ott_region'                  : 'KR',
+                  'page'                        : '1',
+                  'primary_release_date.gte'    : '',
+                  'primary_release_date.lte'    : '',
+                  'region'                      : 'US',
+                  'release_date.gte'            : '2020-07-29',
+                  'release_date.lte'            : '2020-08-19',
+                  'show_me'                     : '0',
+                  'sort_by'                     : 'popularity.desc',
+                  'vote_average.gte'            : '',
+                  'vote_average.lte'            : '',
+                  'vote_count.gte'              : '',
+                  'with_genres'                 : '',
+                  'with_keywords'               : '',
+                  'with_networks'               : '',
+                  'with_origin_country'         : '',
+                  'with_original_language'      : '',
+                  'with_ott_monetization_types' : '',
+                  'with_ott_providers'          : '',
+                  'with_release_type'           : '3',
+                  'with_runtime.gte'            : '0',
+                  'with_runtime.lte'            : '400'
+                  },
     suggetion  : [],
     url        : {
-                  base  : 'https://api.themoviedb.org/3/movie/',
-                  search: 'https://api.themoviedb.org/3/search/movie',
-                  poster: 'https://image.tmdb.org/t/p/original',
+                  base     : 'https://api.themoviedb.org/3/movie/',
+                  discover : 'https://api.themoviedb.org/3/discover/movie',
+                  search   : 'https://api.themoviedb.org/3/search/movie',
+                  poster   : 'https://image.tmdb.org/t/p/original',
                   },
   },
 
@@ -42,7 +105,7 @@ export default new Vuex.Store({
 
   mutations: {
     SET_CATEGORY      : (state, value) => state.category = value,
-    SET_LOADER_TOGGLE : (state)        => state.loading = state.loading ? false : true,
+    SET_LOADER        : (state, value) => state.loader = value,
     SET_KEYWORD       : (state, value) => state.keyword = value,
     SET_MESSAGE       : (state, value) => state.message = value,
     SET_MODAL         : (state)        => state.modal = state.modal ? false : true,
@@ -73,22 +136,21 @@ export default new Vuex.Store({
     },
 
     FETCH_API_MOVIES({state}, category){
-      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=en-US&sort_by=created_at.desc&page=${state.page}`);
+      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=ko&sort_by=${state.sortBy}&page=${state.page}`);
     },
 
     FETCH_API_SEARCH({state}){
       return Axios.get(`${state.url.search}?api_key=${state.apiKey}&language=en-US&include_adult=false&query=${state.keyword}`)
     },
 
+    FETCH_API_DISCOVER({state}, sortBy){
+      return Axios.get(`${state.url.discover}?api_key=${state.apiKey}&language=ko&sort_by=${sortBy}&page=${state.page}&air_date.lte=2021-01-23&certification_country=KR&release_date.lte=2021-01-23&vote_average.gte=0&vote_average.lte=10`)
+    },
+
     FETCH_MOVIE({commit, dispatch}, {id}){
       return dispatch('FETCH_API_MOVIE', id)
       .then(res => commit('SET_MOVIE', res.data))
       .then(()  => commit('SET_MODAL'))
-    },
-    
-    FETCH_MOVIES({commit, dispatch}){
-      return dispatch('FETCH_API_MOVIES')
-      .then(res => commit('SET_MOVIES', res.data.results));
     },
     
     // NOTE sort_by=created_at.desc 쿼리 삽입으로 중복 영화 해결
@@ -102,8 +164,12 @@ export default new Vuex.Store({
           api = 'FETCH_API_SEARCH';
           break;
       }
+      commit('SET_LOADER', true);
       return dispatch(api, commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MORE', res.data.results))
+      .then(() => setTimeout(() => {
+        // commit('SET_LOADER', false)
+      }, 1000))
     },
 
     FETCH_CATEGORY({commit, dispatch}, category){
@@ -112,7 +178,7 @@ export default new Vuex.Store({
       .then((res) => {
         commit('SET_MOVIES', res.data.results)
         commit('SET_RESULT', res.data.total_results) 
-      });
+      })
     },
 
     FETCH_SEARCH({state, commit, dispatch}){
@@ -122,7 +188,7 @@ export default new Vuex.Store({
       })
       return dispatch('FETCH_API_SEARCH', commit('SET_KEYWORD', state.keyword))
       .then(res => commit('SET_MOVIES', res.data.results))
-      .then(() => commit('SET_SUGGeTION', []))
+      .then(() => commit('SET_SUGGETION', []))
       .catch((err) => console.log(err.message))
     },
 
@@ -146,5 +212,11 @@ export default new Vuex.Store({
         .catch(err => alert(err.message));
       }
     },
+
+    FETCH_FILTER({state, dispatch}, filter){
+      var filters = filter.split('.')
+      dispatch('FETCH_API_DISCOVER', state.sortBy[filters[0]][filters[1]])
+      .then(res => console.dir(res))
+    }
   },
 });
