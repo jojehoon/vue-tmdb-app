@@ -1,81 +1,90 @@
 <template>
   <div id="app" class="wrap">
-    <Scrollbar ref="scrollbar" class="scroll-area" :settings="settings"></Scrollbar>
-    <Header></Header>
-    <Nav></Nav>
-    <Main></Main>
-    <Modal v-show="GET_MODAL"></Modal>
+    <!-- <Loader></Loader> -->
+    <vue-custom-scrollbar :settings="settings" @ps-scroll-y="scrollHandle">
+      <Header></Header>
+      <Nav></Nav>
+      <Main></Main>
+      <Modal v-show="GET_MODAL"></Modal>
+    </vue-custom-scrollbar>
   </div>
 </template>
 
 <script>
-import Scrollbar from 'vue-custom-scrollbar';
-import Header         from './component/Header';
-import Main           from './component/Main';
-import Modal          from './component/Modal';
-import Nav            from './component/Nav';
-import { mapGetters }   from 'vuex';
+import VueCustomScrollbar from 'vue-custom-scrollbar';
+import Header from "./component/Header";
+import Main from "./component/Main";
+import Modal from "./component/Modal";
+import Nav from "./component/Nav";
+import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
-  name: 'app',
+  name: "app",
 
   components: {
-    Scrollbar,
+    VueCustomScrollbar,
     Header,
     Main,
     Modal,
-    Nav,
+    Nav
   },
 
-  data(){
+  data() {
     return {
+      // isActiveScrollY : this.scrollY,
       settings: {
-        maxScrollbarLength: 10,
-        wheelSpeed : 3,
+        wheelSpeed: 1,
+        wheelPropagation: true,
+        minScrollbarLength: 200,
+        suppressScrollY: false,
       }
-    }
+    };
   },
 
   computed: {
-    ...mapGetters(['GET_MODAL']),
+    ...mapState(['scrollY']),
+    ...mapGetters(['GET_MODAL', 'GET_SCROLLY'])
   },
 
   methods: {
-    getWindowInfo(){
-      const scrollbar = document.querySelector('.scroll-area')
-      console.log(scrollbar);
-      let size = {
-        width : window.innerWidth,
-        height: window.innerHeight
-      }
-      console.dir(scrollbar.style);
-      scrollbar.style.width = size.width;
-      scrollbar.style.height = size.height;
-    }
-  },
-  
-  created(){
-    window.addEventListener('resize', this.getWindowInfo);
-  },
-  
-  mounted(){
-    this.getWindowInfo();
+    ...mapMutations(['SET_SCROLLY']),
+    scrollHandle(evt) {
+      // console.log(evt);
+    },
+
   },
 
-  destroyed(){
-    window.removeEventListener('resize', this.getWindowInfo);
+  created() {
+  },
+
+  mounted() {
+    console.dir(VueCustomScrollbar);
+    this.$store.subscribe((mutation, state) => {
+      if(mutation.type === 'SET_LOADER' && state.loader === true){
+        this.settings.suppressScrollY = true;
+      }
+      else if (mutation.type === 'SET_LOADER' && state.loader === false){
+        this.settings.suppressScrollY = false;
+      }
+      
+    })
+  },
+
+  destroyed() {
   }
-}
+};
 </script>
 
 // 공통으로 뺄 것
 <style lang="scss">
-@import './scss/reset.scss';
-@import './scss/common.scss';
+@import "./scss/reset.scss";
+@import "./scss/common.scss";
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .wrap {
+  position: relative;
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -83,11 +92,5 @@ export default {
   @media screen and (min-width: 768px) {
     padding-left: 95px;
   }
-}
-.scroll-area {
-  position: relative;
-  width: auto;
-  height: auto;
-  margin: auto;
 }
 </style>

@@ -18,7 +18,7 @@ export default {
 .loader {
 
   &-mask {
-    position: absolute;
+    position: fixed;
     z-index: 100000;
     background-color: hsla(0,0%,100%,.9);
     margin: 0;

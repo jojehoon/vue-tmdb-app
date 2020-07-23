@@ -24,6 +24,7 @@ export default new Vuex.Store({
     movies     : [],
     page       : 1,
     results    : 0,
+    scrollY    : false,
     sortBy     : {
                   default : 'created_at.desc',
                   popularity: {
@@ -101,6 +102,7 @@ export default new Vuex.Store({
     GET_MOVIE   : (state) => state.movie,
     GET_MODAL   : (state) => state.modal,
     GET_SUGGETION : (state) => state.suggetion,
+    GET_SCROLLY : (state) => state.scrollY,
   },
 
   mutations: {
@@ -127,6 +129,7 @@ export default new Vuex.Store({
                                                 break;
                                             }
                                           },
+    SET_SCROLLY       : (state)        => state.scrollY = state.scrollY ? false : true,
     SET_SUGGETION     : (state, suggestedMovies) => state.suggetion = suggestedMovies,
   },
   
@@ -168,7 +171,7 @@ export default new Vuex.Store({
       return dispatch(api, commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MORE', res.data.results))
       .then(() => setTimeout(() => {
-        // commit('SET_LOADER', false)
+        commit('SET_LOADER', false)
       }, 1000))
     },
 
