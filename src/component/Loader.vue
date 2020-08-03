@@ -1,11 +1,13 @@
 <template>
-  <div class="loader-mask" style="">
-    <div class="loader-spinner">
-      <svg viewBox="25 25 50 50" class="circular">
-        <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
-      </svg>
+  <transition name="loader" @scroll.prevent>
+    <div class="loader-mask">
+      <div class="loader-spinner">
+        <svg viewBox="25 25 50 50" class="circular">
+          <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+        </svg>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -15,18 +17,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../scss/mixin.scss';
+
 .loader {
 
   &-mask {
     position: fixed;
     z-index: 100000;
     background-color: hsla(0,0%,100%,.9);
-    margin: 0;
+    // margin: 0;
     top: 0;
     right: 0;
-    bottom: 0;
-    left: 0;
+    width: 100%;
+    height: 100%;
+    // bottom: 0;
+    // left: 0;
     transition: opacity .3s;
+
+      font-size: 0;
+  text-align: center;
+  white-space: nowrap;
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+    }
   }
 
   &-spinner {
@@ -73,5 +89,9 @@ export default {
       stroke-dasharray: 90,150;
       stroke-dashoffset: -120px
   }
+}
+
+.loader {
+  @include routerTransitionFade(0.1s)
 }
 </style>

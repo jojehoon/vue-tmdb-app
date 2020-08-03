@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <section class="modal" v-modal @click.stop="SET_MODAL">
+    <section class="modal" v-modal @click.stop="SET_MODAL" @scroll.prevent>
       <div class="modal__inner" @click.stop> 
         <div class="movie">
           <div class="movie__header" :style="moviePathBackdrop">

@@ -1,18 +1,19 @@
 <template>
   <div id="app" class="wrap">
-    <!-- <Loader></Loader> -->
-    <vue-custom-scrollbar :settings="settings" @ps-scroll-y="scrollHandle">
+    <vue-custom-scrollbar :settings="settings">
       <Header></Header>
       <Nav></Nav>
       <Main></Main>
-      <Modal v-show="GET_MODAL"></Modal>
     </vue-custom-scrollbar>
+    <Loader v-show="GET_LOADER"></Loader>
+    <Modal v-show="GET_MODAL"></Modal>
   </div>
 </template>
 
 <script>
 import VueCustomScrollbar from 'vue-custom-scrollbar';
 import Header from "./component/Header";
+import Loader from "./component/Loader";
 import Main from "./component/Main";
 import Modal from "./component/Modal";
 import Nav from "./component/Nav";
@@ -24,6 +25,7 @@ export default {
   components: {
     VueCustomScrollbar,
     Header,
+    Loader,
     Main,
     Modal,
     Nav
@@ -37,41 +39,49 @@ export default {
         wheelPropagation: true,
         minScrollbarLength: 200,
         suppressScrollY: false,
-      }
+      },
     };
   },
 
   computed: {
-    ...mapState(['scrollY']),
-    ...mapGetters(['GET_MODAL', 'GET_SCROLLY'])
+    ...mapState(['loader', 'scrollSetting']),
+    ...mapGetters(['GET_LOADER', 'GET_MODAL', 'GET_SCROLLY'])
   },
 
   methods: {
     ...mapMutations(['SET_SCROLLY']),
-    scrollHandle(evt) {
-      // console.log(evt);
-    },
-
   },
 
-  created() {
+  watch: {
+    // '$route' (to, from){
+    //   console.log('app watch');
+    //   console.log(this.settings.suppressScrollY);
+
+    //   this.settings.suppressScrollY = true;
+    //   console.log(this.settings.suppressScrollY);
+    //   setTimeout(() => {
+    //     this.settings.suppressScrollY = false;
+    //   }, 0);
+    //   console.log(this.settings.suppressScrollY);
+    // }
   },
 
-  mounted() {
-    console.dir(VueCustomScrollbar);
-    this.$store.subscribe((mutation, state) => {
-      if(mutation.type === 'SET_LOADER' && state.loader === true){
-        this.settings.suppressScrollY = true;
-      }
-      else if (mutation.type === 'SET_LOADER' && state.loader === false){
-        this.settings.suppressScrollY = false;
-      }
-      
-    })
-  },
+  // updated(){
+  //   console.log('app updated');
+  // },
 
-  destroyed() {
-  }
+  // beforeRouteLeave(to, from, next){
+  //   console.log('app beforeRouteLeave');
+  // },
+
+  // beforeRouteEnter(to, from, next){
+  //   console.log('app beforeRouteUpdate');
+  // },
+
+  // beforeRouteUpdate(to, from, next){
+  //   console.log('app beforeRouteUpdate');
+  // }
+
 };
 </script>
 

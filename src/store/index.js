@@ -56,6 +56,12 @@ export default new Vuex.Store({
                     desc: 'vote_count.desc',
                   },
     },
+    scrollSettings : {
+                      wheelSpeed: 1,
+                      wheelPropagation: true,
+                      minScrollbarLength: 200,
+                      suppressScrollY: false,
+    },
     sortForm    : {
                   'air_date.gte'                : '',
                   'air_date.lte'                : '2021-01-23',
@@ -97,6 +103,7 @@ export default new Vuex.Store({
   },
 
   getters: {
+    GET_LOADER  : (state) => state.loader,
     GET_KEYWORD : (state) => state.keyword,
     GET_MOVIES  : (state) => state.movies,
     GET_MOVIE   : (state) => state.movie,
@@ -107,7 +114,7 @@ export default new Vuex.Store({
 
   mutations: {
     SET_CATEGORY      : (state, value) => state.category = value,
-    SET_LOADER        : (state, value) => state.loader = value,
+    SET_LOADER        : (state, value) => state.loader = state.loader ? false : true,
     SET_KEYWORD       : (state, value) => state.keyword = value,
     SET_MESSAGE       : (state, value) => state.message = value,
     SET_MODAL         : (state)        => state.modal = state.modal ? false : true,
@@ -129,7 +136,7 @@ export default new Vuex.Store({
                                                 break;
                                             }
                                           },
-    SET_SCROLLY       : (state)        => state.scrollY = state.scrollY ? false : true,
+    SET_SCROLLSETTINGS: (state, value)  => Object.assign(state.scrollSettings, value),
     SET_SUGGETION     : (state, suggestedMovies) => state.suggetion = suggestedMovies,
   },
   
@@ -167,12 +174,13 @@ export default new Vuex.Store({
           api = 'FETCH_API_SEARCH';
           break;
       }
-      commit('SET_LOADER', true);
+      commit('SET_LOADER');
       return dispatch(api, commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MORE', res.data.results))
-      .then(() => setTimeout(() => {
-        commit('SET_LOADER', false)
-      }, 1000))
+      .then(() => setTimeout(() => {commit('SET_LOADER')}, 3000))
+      // setTimeout(() => {
+      //   commit('SET_LOADER')
+      // }, 3000)
     },
 
     FETCH_CATEGORY({commit, dispatch}, category){
