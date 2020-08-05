@@ -21,8 +21,8 @@
       >
         <a class="suggetion__link" @click="openModal(movie)">
           <figure class="suggetion__info">
-            <img class="suggetion__image" src="../assets/no-image.png" width="50" height="75">
-            <!-- <img class="suggetion__image" :src="getMovieImageUrl(movie, 220, 330)" width="50" height="75"> -->
+            <!-- <img class="suggetion__image" src="../assets/no-image.png" width="50" height="75"> -->
+            <img class="suggetion__image" :src="getMovieImageUrl(movie, 220, 330)" width="50" height="75">
             <figcaption class="suggetion__text">
               <strong class="suggetion__title">{{ movie.title }}</strong>
               <span class="suggetion__date">{{ movie.release_date }}</span> 

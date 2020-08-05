@@ -57,9 +57,9 @@ const scrollBehavior = function (to, from, savedPosition) {
 
     return new Promise(resolve => {
       if (to.matched.some(m => m.meta.scrollToTop)) {
-        console.dir(document.querySelector('.ps-container'));
-        console.dir(document.querySelector('.ps__rail-y'));
-        console.dir(document.querySelector('.ps__rail-x'));
+        // console.dir(document.querySelector('.ps-container'));
+        // console.dir(document.querySelector('.ps__rail-y'));
+        // console.dir(document.querySelector('.ps__rail-x'));
         // document.querySelector('.ps-container').style.opacity = 0;
         setTimeout(() => {
           document.querySelector('.ps-container').scrollTo(0, 0);

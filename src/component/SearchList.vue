@@ -6,8 +6,8 @@
       <li class="search__item" v-for="movie in movies" :key="movie.id">
         <a class="search__link" @click="openModal(movie)">
           <figure class="search__poster">
-            <!-- <img class="search__image" :src="getMovieImageUrl(movie, 370, 556)" :title="movie.title"> -->
-            <img class="search__image" src="../assets/no-image.png">
+            <img class="search__image" :src="getMovieImageUrl(movie, 370, 556)" :title="movie.title">
+            <!-- <img class="search__image" src="../assets/no-image.png"> -->
           </figure>
           <p class="search__title">{{ movie.title }}</p>
         </a>

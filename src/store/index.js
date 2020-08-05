@@ -146,7 +146,7 @@ export default new Vuex.Store({
     },
 
     FETCH_API_MOVIES({state}, category){
-      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=ko&sort_by=${state.sortBy}&page=${state.page}`);
+      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=ko&sort_by=${state.sortBy}&page=${state.page}&include_adult=false`);
     },
 
     FETCH_API_SEARCH({state}){
@@ -154,7 +154,7 @@ export default new Vuex.Store({
     },
 
     FETCH_API_DISCOVER({state}, sortBy){
-      return Axios.get(`${state.url.discover}?api_key=${state.apiKey}&language=ko&sort_by=${sortBy}&page=${state.page}&air_date.lte=2021-01-23&certification_country=KR&release_date.lte=2021-01-23&vote_average.gte=0&vote_average.lte=10`)
+      return Axios.get(`${state.url.discover}?api_key=${state.apiKey}&language=ko&include_adult=true&sort_by=${sortBy}&page=${state.page}&air_date.lte=2021-01-23&certification_country=KR&release_date.lte=2021-01-23&vote_average.gte=0&vote_average.lte=10`)
     },
 
     FETCH_MOVIE({commit, dispatch}, {id}){
@@ -177,7 +177,7 @@ export default new Vuex.Store({
       commit('SET_LOADER');
       return dispatch(api, commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MORE', res.data.results))
-      .then(() => setTimeout(() => {commit('SET_LOADER')}, 3000))
+      .then(() => setTimeout(() => {commit('SET_LOADER')}, 0))
       // setTimeout(() => {
       //   commit('SET_LOADER')
       // }, 3000)
@@ -224,10 +224,12 @@ export default new Vuex.Store({
       }
     },
 
-    FETCH_FILTER({state, dispatch}, filter){
+    FETCH_FILTER({state, commit, dispatch}, filter){
       var filters = filter.split('.')
       dispatch('FETCH_API_DISCOVER', state.sortBy[filters[0]][filters[1]])
-      .then(res => console.dir(res))
+      // .then(res => console.dir(res))
+      .then(res => commit('SET_MOVIES', res.data.results))
+      
     }
   },
 });
