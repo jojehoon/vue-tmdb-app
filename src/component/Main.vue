@@ -20,6 +20,7 @@ export default {
   flex-direction: column;
   flex: 1;
   width: 100%;
+  height: calc(100vh - 75px);
   padding: 0 30px;
   margin-top: 50px;
   background: #f8f8f8;

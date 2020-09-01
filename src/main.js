@@ -5,7 +5,7 @@ import router from "./router/index";
 import Axios from "axios";
 // import PerfectScrollbar from 'vue2-perfect-scrollbar';
 import VueCustomScrollbar from "vue-custom-scrollbar";
-import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
+// import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 
 Vue.config.productionTip = false;
 

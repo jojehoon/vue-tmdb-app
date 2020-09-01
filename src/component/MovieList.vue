@@ -12,9 +12,10 @@
     <h2 class="movies__category">{{ category | toCapitalize(' Movies')}} <span class="movies__results">{{ results | toNumberFormat }} results</span></h2>
     <ul class="movies__list">
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
-            <!-- <img class="movies__image" src="../assets/no-image.png" :title="movie.title"> -->
         <a class="movies__link" v-if="movie.poster_path" @click="openModal(movie)">
           <figure class="movies__poster">
+            <!-- <img class="movies__image" src="../assets/no-image.png" :title="movie.title"> -->
+            <!-- FIXME 이미지 TTFB 시간이 굉장히 지연됨  -->
             <img v-lazyload class="movies__image" :data-src="getMovieImageUrl(movie, 370, 556)" :title="movie.title">
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
@@ -37,7 +38,7 @@ import { toCapitalize, toNumberFormat } from '../filter/index';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import store from '../store/index';
 import router from '../router/index';
-import { lazyLoad }                    from '../directive/index';
+import { lazyLoad } from '../directive/index';
 
 export default {
   mixins: [getMovieImageUrl],
@@ -73,8 +74,6 @@ export default {
 
     sortMovies(e){
       const sortBy = e.target.dataset.sort;
-      // console.log(e.target.dataset.sort);
-      // console.log(sortBy);
       this.FETCH_FILTER(sortBy);
     },
   },

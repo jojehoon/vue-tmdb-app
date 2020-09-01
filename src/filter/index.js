@@ -19,8 +19,7 @@ export const toString = function(value){
 
 export const toDate = function(value){
   if(!value) return '';
-  const months = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'];
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   const [years, month, day] = value.split('-');
   const monthIndex = parseInt(month, 10) - 1;

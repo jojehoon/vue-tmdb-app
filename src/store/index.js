@@ -63,35 +63,35 @@ export default new Vuex.Store({
                       suppressScrollY: false,
     },
     sortForm    : {
-                  'air_date.gte'                : '',
-                  'air_date.lte'                : '2021-01-23',
-                  'certification'               : '',
-                  'certification_country'       : 'KR',
-                  'debug'                       : '',
-                  'first_air_date.gte'          : '',
-                  'first_air_date.lte'          : '',
-                  'ott_region'                  : 'KR',
-                  'page'                        : '1',
-                  'primary_release_date.gte'    : '',
-                  'primary_release_date.lte'    : '',
-                  'region'                      : 'US',
-                  'release_date.gte'            : '2020-07-29',
-                  'release_date.lte'            : '2020-08-19',
-                  'show_me'                     : '0',
-                  'sort_by'                     : 'popularity.desc',
-                  'vote_average.gte'            : '',
-                  'vote_average.lte'            : '',
-                  'vote_count.gte'              : '',
-                  'with_genres'                 : '',
-                  'with_keywords'               : '',
-                  'with_networks'               : '',
-                  'with_origin_country'         : '',
-                  'with_original_language'      : '',
-                  'with_ott_monetization_types' : '',
-                  'with_ott_providers'          : '',
-                  'with_release_type'           : '3',
-                  'with_runtime.gte'            : '0',
-                  'with_runtime.lte'            : '400'
+                    air_date_gte                 : '',
+                    air_date_lte                 : '2021-03-31',
+                    certification                : '',
+                    certification_country        : 'KR',
+                    debug                        : '',
+                    first_air_date_gte           : '',
+                    first_air_date_lte           : '',
+                    ott_region                   : 'KR',
+                    page                         : '1',
+                    primary_release_date_gte     : '',
+                    primary_release_date_lte     : '',
+                    region                       : '',
+                    release_date_gte             : '2020-09-01',
+                    release_date_lte             : '2021-03-31',
+                    show_me                      : '0',
+                    sort_by                      : 'popularity.desc',
+                    vote_average_gte             : '',
+                    vote_average_lte             : '',
+                    vote_count_gte               : '',
+                    with_genres                  : '',
+                    with_keywords                : '',
+                    with_networks                : '',
+                    with_origin_country          : '',
+                    with_original_language       : '',
+                    with_ott_monetization_types  : '',
+                    with_ott_providers           : '',
+                    with_release_type            : '',
+                    with_runtime_gte             : '0',
+                    with_runtime_lte             : '400'
                   },
     suggetion  : [],
     url        : {
@@ -146,7 +146,7 @@ export default new Vuex.Store({
     },
 
     FETCH_API_MOVIES({state}, category){
-      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=ko&sort_by=${state.sortBy}&page=${state.page}&include_adult=false`);
+      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=ko&sort_by=${state.sortBy.default}&page=${state.page}&include_adult=false`);
     },
 
     FETCH_API_SEARCH({state}){
@@ -154,7 +154,7 @@ export default new Vuex.Store({
     },
 
     FETCH_API_DISCOVER({state}, sortBy){
-      return Axios.get(`${state.url.discover}?api_key=${state.apiKey}&language=ko&include_adult=true&sort_by=${sortBy}&page=${state.page}&air_date.lte=2021-01-23&certification_country=KR&release_date.lte=2021-01-23&vote_average.gte=0&vote_average.lte=10`)
+      return Axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${state.apiKey}&language=ko-KR&region=KR&include_adult=false&sort_by=${sortBy}&page=${state.page}&release_date.lte=${state.sortForm.release_date_lte}&vote_average.gte=1&with_release_type=2|3`)
     },
 
     FETCH_MOVIE({commit, dispatch}, {id}){
@@ -177,10 +177,7 @@ export default new Vuex.Store({
       commit('SET_LOADER');
       return dispatch(api, commit('SET_PAGE_ADD'))
       .then(res => commit('SET_MORE', res.data.results))
-      .then(() => setTimeout(() => {commit('SET_LOADER')}, 0))
-      // setTimeout(() => {
-      //   commit('SET_LOADER')
-      // }, 3000)
+      .then(commit('SET_LOADER'))
     },
 
     FETCH_CATEGORY({commit, dispatch}, category){
@@ -229,7 +226,6 @@ export default new Vuex.Store({
       dispatch('FETCH_API_DISCOVER', state.sortBy[filters[0]][filters[1]])
       // .then(res => console.dir(res))
       .then(res => commit('SET_MOVIES', res.data.results))
-      
     }
   },
 });
