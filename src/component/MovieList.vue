@@ -69,14 +69,9 @@ export default {
     }
   },
 
-  updated(){
-    console.log(this.movies.length, this.results);
-  },
-
   methods: {
     ...mapMutations(['SET_LOADER', 'SET_RESET_STATE']),
     ...mapActions(['FETCH_CATEGORY', 'FETCH_FILTER', 'FETCH_MORE', 'FETCH_MOVIE', 'FETCH_MOVIES']),
-
 
     openModal(movie){
       this.FETCH_MOVIE({id : movie.id})

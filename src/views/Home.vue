@@ -14,11 +14,27 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
+  data(){
+    return {
+      movies: [
+        {now: []},
+        {popular: []},
+        {top: []},
+        {upcoming: []},
+      ],
+    }
+  },
+
+  methods: {
+    ...mapActions(['FETCH_MOVIES']),
+  },
 
   beforeRouteLeave(to, from, next){
-  next();
-  }
+    next();
+  },
 }
 </script>
 
