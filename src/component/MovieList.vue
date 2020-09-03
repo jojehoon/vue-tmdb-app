@@ -1,22 +1,20 @@
 <template>
   <section class="movies">
     <!-- <Loader v-show="loader"></Loader> -->
-    <div class="filters">
-      <button class="button__sort" type="button" data-sort="original_title.asc"  @click="sortMovies">제목 오름차순</button>
-      <button class="button__sort" type="button" data-sort="original_title.desc" @click="sortMovies">제목 내림차순</button>
-      <button class="button__sort" type="button" data-sort="release_date.asc"    @click="sortMovies">상영일 오름차순</button>
-      <button class="button__sort" type="button" data-sort="release_date.desc"   @click="sortMovies">상영일 내림차순</button>
-      <button class="button__sort" type="button" data-sort="popularity.asc"      @click="sortMovies">인기도 오름차순</button>
-      <button class="button__sort" type="button" data-sort="popularity.desc"     @click="sortMovies">인기도 내림차순</button>
-    </div>
+    <select name="filters" @change="filterMovies">
+      <option v-for="(item, index) in sort" :value="item.name" :key="index">{{ item.desc }}</option>
+    </select>
+    <Datepicker :language="ko" placeholder="release from" />
+    <Datepicker :language="ko" placeholder="release to" />
     <h2 class="movies__category">{{ category | toCapitalize(' Movies')}} <span class="movies__results">{{ results | toNumberFormat }} results</span></h2>
+    <transition name="fade">
     <ul class="movies__list">
       <li class="movies__item" v-for="movie in movies" :key="movie.id">
-        <a class="movies__link" v-if="movie.poster_path" @click="openModal(movie)">
+        <a class="movies__link" @click="openModal(movie)">
           <figure class="movies__poster">
             <!-- <img class="movies__image" src="../assets/no-image.png" :title="movie.title"> -->
             <!-- FIXME 이미지 TTFB 시간이 굉장히 지연됨  -->
-            <img v-lazyload class="movies__image" :data-src="getMovieImageUrl(movie, 370, 556)" :title="movie.title">
+            <img class="movies__image" :src="getMovieImageUrl(movie, 370, 556)" :title="movie.title">
           </figure>
           <p class="movies__title">{{ movie.title }}</p>
         </a>
@@ -25,9 +23,8 @@
         </div> -->
       </li>
     </ul>
-    <button class="button__more" @click.stop="FETCH_MORE">Load More</button>
-    <!-- <a class="movies__link" @click="openModal(movie)">Load More</a> -->
-
+    </transition>
+    <button v-show="isEnd" class="button__more" @click.stop="FETCH_MORE">Load More</button>
   </section>
 </template>
 
@@ -39,6 +36,8 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 import store from '../store/index';
 import router from '../router/index';
 import { lazyLoad } from '../directive/index';
+import Datepicker from 'vuejs-datepicker';
+import { ko } from 'vuejs-datepicker/dist/locale'
 
 export default {
   mixins: [getMovieImageUrl],
@@ -48,6 +47,7 @@ export default {
   },
   
   components: {
+    Datepicker,
     Loader,
   },
 
@@ -56,35 +56,36 @@ export default {
     toNumberFormat,
   },
 
-  computed: {
-    ...mapState(['category', 'loader', 'movies', 'results']),
+  data(){
+    return {
+      ko: ko,
+    }
   },
 
-  mounted(){
-    // document.querySelector
+  computed: {
+    ...mapState(['category', 'sort', 'loader', 'movies', 'results']),
+    isEnd(){
+      return this.movies.length >= this.results ? false : true
+    }
+  },
+
+  updated(){
+    console.log(this.movies.length, this.results);
   },
 
   methods: {
     ...mapMutations(['SET_LOADER', 'SET_RESET_STATE']),
     ...mapActions(['FETCH_CATEGORY', 'FETCH_FILTER', 'FETCH_MORE', 'FETCH_MOVIE', 'FETCH_MOVIES']),
 
+
     openModal(movie){
       this.FETCH_MOVIE({id : movie.id})
     },
 
-    sortMovies(e){
-      const sortBy = e.target.dataset.sort;
-      this.FETCH_FILTER(sortBy);
+    filterMovies(e){
+      const sort = e.target.value;
+      this.FETCH_FILTER(sort);
     },
-  },
-
-
-
-  updated(){
-    // console.log('updated');
-    // setTimeout(() => {
-    //   store.commit('SET_LOADER', false);
-    // }, 3000)
   },
 
   beforeRouteEnter(to, from, next){
@@ -96,18 +97,13 @@ export default {
 
   beforeRouteUpdate(to, from, next){
     this.FETCH_CATEGORY(to.params.category);
-    // console.log('beforeRouteUpdate');
-
     next();
   },
 
   beforeRouteLeave(to, from, next){
     this.SET_RESET_STATE();
-    // console.log('beforeRouteLeave');
-
     next();
   },
-
 }
 </script>
 

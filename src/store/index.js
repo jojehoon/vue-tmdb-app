@@ -1,7 +1,7 @@
-import Vue        from 'vue';
-import Vuex, { Store }       from 'vuex';
-import Axios      from 'axios';
-import router     from '../router';
+import Vue from 'vue';
+import Vuex, { Store } from 'vuex';
+import Axios from 'axios';
+import router from '../router';
 import { apiKey } from '../auth';
 
 Vue.use(Vuex);
@@ -22,139 +22,146 @@ export default new Vuex.Store({
     modal      : false,
     movie      : {},
     movies     : [],
-    page       : 1,
     results    : 0,
     scrollY    : false,
-    sortBy     : {
-                  default : 'created_at.desc',
-                  popularity: {
-                    asc  : 'popularity.asc',
-                    desc : 'popularity.desc',
+    sort       : [
+                // {
+                //   default : 'created_at.desc',
+                // },
+                  {
+                    name: 'popularity.asc',
+                    desc: '인기도 오름차순',
                   },
-                  release_date: {
-                    asc  : 'release_date.asc',
-                    desc : 'release_date.desc',
+                  {
+                    name: 'popularity.desc',
+                    desc: '인기도 내림차순',
                   },
-                  revenue : {
-                    asc  : 'revenue.asc',
-                    desc : 'revenue.desc',
+                  {
+                    name: 'release_date.asc',
+                    desc: '상영일 오름차순',
                   },
-                  primary_release_date : {
-                    asc : 'primary_release_date.asc',
-                    desc: 'primary_release_date.desc',
+                  {
+                    name: 'release_date.desc',
+                    desc: '상영일 내림차순',
                   },
-                  original_title: {
-                    asc : 'original_title.asc',
-                    desc: 'original_title.desc',
+                  {
+                    name: 'original_title.asc',
+                    desc: '제목 오름차순',
                   },
-                  vote_average: {
-                    asc : 'vote_average.asc',
-                    desc: 'vote_average.desc',
+                  {
+                    name: 'original_title.desc',
+                    desc: '제목 내림차순',
                   },
-                  vote_count: {
-                    asc : 'vote_count.asc',
-                    desc: 'vote_count.desc',
+                  {
+                    name: 'vote_average.asc',
+                    desc: '평점 오름차순',
                   },
-    },
+                  {
+                    name: 'vote_average.desc',
+                    desc: '평점 내림차순',
+                  },
+    ],
     scrollSettings : {
                       wheelSpeed: 1,
                       wheelPropagation: true,
                       minScrollbarLength: 200,
                       suppressScrollY: false,
     },
-    sortForm    : {
-                    air_date_gte                 : '',
-                    air_date_lte                 : '2021-03-31',
-                    certification                : '',
-                    certification_country        : 'KR',
-                    debug                        : '',
-                    first_air_date_gte           : '',
-                    first_air_date_lte           : '',
-                    ott_region                   : 'KR',
-                    page                         : '1',
-                    primary_release_date_gte     : '',
-                    primary_release_date_lte     : '',
-                    region                       : '',
-                    release_date_gte             : '2020-09-01',
-                    release_date_lte             : '2021-03-31',
-                    show_me                      : '0',
-                    sort_by                      : 'popularity.desc',
-                    vote_average_gte             : '',
-                    vote_average_lte             : '',
-                    vote_count_gte               : '',
-                    with_genres                  : '',
-                    with_keywords                : '',
-                    with_networks                : '',
-                    with_origin_country          : '',
-                    with_original_language       : '',
-                    with_ott_monetization_types  : '',
-                    with_ott_providers           : '',
-                    with_release_type            : '',
-                    with_runtime_gte             : '0',
-                    with_runtime_lte             : '400'
-                  },
-    suggetion  : [],
-    url        : {
-                  base     : 'https://api.themoviedb.org/3/movie/',
-                  discover : 'https://api.themoviedb.org/3/discover/movie',
-                  search   : 'https://api.themoviedb.org/3/search/movie',
-                  poster   : 'https://image.tmdb.org/t/p/original',
-                  },
+    filter : {
+              adult                        : false,
+              air_date_gte                 : '',
+              air_date_lte                 : '2021-03-31',
+              certification                : '',
+              certification_country        : 'KR',
+              debug                        : '',
+              first_air_date_gte           : '',
+              first_air_date_lte           : '',
+              language                     : 'ko-KR',
+              ott_region                   : 'KR',
+              page                         : '1',
+              primary_release_date_gte     : '',
+              primary_release_date_lte     : '',
+              region                       : 'KR',
+              release_date_gte             : '2020-09-01',
+              release_date_lte             : '2021-03-31',
+              show_me                      : '0',
+              sort_by                      : 'popularity.desc',
+              vote_average_gte             : '1',
+              vote_average_lte             : '',
+              vote_count_gte               : '',
+              with_genres                  : '',
+              with_keywords                : '',
+              with_networks                : '',
+              with_origin_country          : '',
+              with_original_language       : '',
+              with_ott_monetization_types  : '',
+              with_ott_providers           : '',
+              with_release_type            : '2|3',
+              with_runtime_gte             : '0',
+              with_runtime_lte             : '400'
+    },
+    suggetion: [],
+    url: {
+          base     : 'https://api.themoviedb.org/3/movie/',
+          discover : 'https://api.themoviedb.org/3/discover/movie',
+          search   : 'https://api.themoviedb.org/3/search/movie',
+          poster   : 'https://image.tmdb.org/t/p/original',
+          },
   },
 
   getters: {
-    GET_LOADER  : (state) => state.loader,
-    GET_KEYWORD : (state) => state.keyword,
-    GET_MOVIES  : (state) => state.movies,
-    GET_MOVIE   : (state) => state.movie,
-    GET_MODAL   : (state) => state.modal,
-    GET_SUGGETION : (state) => state.suggetion,
-    GET_SCROLLY : (state) => state.scrollY,
+    GET_LOADER   : (state) => state.loader,
+    GET_KEYWORD  : (state) => state.keyword,
+    GET_MOVIES   : (state) => state.movies,
+    GET_MOVIE    : (state) => state.movie,
+    GET_MODAL    : (state) => state.modal,
+    GET_SUGGETION: (state) => state.suggetion,
+    GET_SCROLLY  : (state) => state.scrollY,
   },
 
   mutations: {
-    SET_CATEGORY      : (state, value) => state.category = value,
-    SET_LOADER        : (state, value) => state.loader = state.loader ? false : true,
-    SET_KEYWORD       : (state, value) => state.keyword = value,
-    SET_MESSAGE       : (state, value) => state.message = value,
-    SET_MODAL         : (state)        => state.modal = state.modal ? false : true,
-    SET_MOVIE         : (state, value) => state.movie = value,
-    SET_MOVIES        : (state, value) => state.movies = value,
-    SET_MORE          : (state, addedMovies) => state.movies = [...state.movies, ...addedMovies],
-    SET_PAGE_ADD      : (state)        => state.page += 1,
-    SET_RESULT        : (state, value) => state.results = value,
-    SET_RESET_PAGE    : (state)        => state.page = 1,
-    SET_RESET_STATE   : (state)        => {
-                                            state.movies = [];
-                                            state.page   = 1;
-                                            switch (router.history.current.name) {
-                                              case 'Movie':
-                                                state.category = '';
-                                                break;
-                                              case 'Search':
-                                                state.keyword = '';
-                                                break;
-                                            }
-                                          },
+    SET_CATEGORY   : (state, value) => state.category = value,
+    SET_LOADER     : (state, value) => state.loader = state.loader ? false : true,
+    SET_KEYWORD    : (state, value) => state.keyword = value,
+    SET_MESSAGE    : (state, value) => state.message = value,
+    SET_MODAL      : (state)        => state.modal = state.modal ? false : true,
+    SET_MOVIE      : (state, value) => state.movie = value,
+    SET_MOVIES     : (state, value) => state.movies = value,
+    SET_MORE       : (state, addedMovies) => state.movies = [...state.movies, ...addedMovies],
+    SET_PAGE_ADD   : (state)        => state.filter.page += 1,
+    SET_RESULT     : (state, value) => state.results = value,
+    SET_RESET_PAGE : (state)        => state.filter.page = 1,
+    SET_RESET_STATE: (state)        => {
+                                        state.movies = [];
+                                        state.page   = 1;
+                                        switch (router.history.current.name) {
+                                          case 'Movie':
+                                            state.category = '';
+                                            break;
+                                          case 'Search':
+                                            state.keyword = '';
+                                            break;
+                                        }
+                                      },
     SET_SCROLLSETTINGS: (state, value)  => Object.assign(state.scrollSettings, value),
     SET_SUGGETION     : (state, suggestedMovies) => state.suggetion = suggestedMovies,
   },
   
   actions: {
     FETCH_API_MOVIE({state}, id){
-      return Axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${state.apiKey}&language=en-US`)
+      return Axios.get(`${state.url.base}${id}?api_key=${state.apiKey}&language=${state.filter.language}`)
     },
 
     FETCH_API_MOVIES({state}, category){
-      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=ko&sort_by=${state.sortBy.default}&page=${state.page}&include_adult=false`);
+      return Axios.get(`${state.url.base}${state.category}?api_key=${state.apiKey}&language=${state.filter.language}&region=${state.filter.region}&sort_by=${state.sort ? state.sort : 'created_at.desc'}&page=${state.filter.page}&include_adult=${state.filter.adult}`);
     },
 
     FETCH_API_SEARCH({state}){
-      return Axios.get(`${state.url.search}?api_key=${state.apiKey}&language=en-US&include_adult=false&query=${state.keyword}`)
+      return Axios.get(`${state.url.search}?api_key=${state.apiKey}&language=${state.filter.language}&region=${state.filter.region}&include_adult=${state.filter.adult}&query=${state.keyword}`);
     },
 
-    FETCH_API_DISCOVER({state}, sortBy){
-      return Axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${state.apiKey}&language=ko-KR&region=KR&include_adult=false&sort_by=${sortBy}&page=${state.page}&release_date.lte=${state.sortForm.release_date_lte}&vote_average.gte=1&with_release_type=2|3`)
+    FETCH_API_DISCOVER({state}, sort){
+      return Axios.get(`${state.url.discover}?api_key=${state.apiKey}&language=${state.filter.language}&region=${state.filter.region}&include_adult=${state.filter.adult}&sort_by=${sort}&page=${state.filter.page}&release_date.lte=${state.filter.release_date_lte}&vote_average.gte=${state.filter.vote_average_gte}&with_release_type=${state.filter.vote_average_gte}`);
     },
 
     FETCH_MOVIE({commit, dispatch}, {id}){
@@ -221,10 +228,8 @@ export default new Vuex.Store({
       }
     },
 
-    FETCH_FILTER({state, commit, dispatch}, filter){
-      var filters = filter.split('.')
-      dispatch('FETCH_API_DISCOVER', state.sortBy[filters[0]][filters[1]])
-      // .then(res => console.dir(res))
+    FETCH_FILTER({state, commit, dispatch}, sort){
+      dispatch('FETCH_API_DISCOVER', sort)
       .then(res => commit('SET_MOVIES', res.data.results))
     }
   },

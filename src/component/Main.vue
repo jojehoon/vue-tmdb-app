@@ -1,7 +1,7 @@
 <template>
   <main class="main">
     <transition name="fade">
-        <router-view :key="this.$route.fullPath"></router-view>
+      <router-view :key="this.$route.fullPath"></router-view>
     </transition>
   </main>
 </template>
@@ -20,9 +20,9 @@ export default {
   flex-direction: column;
   flex: 1;
   width: 100%;
-  height: calc(100vh - 75px);
+  min-height: calc(100vh - 75px);
   padding: 0 30px;
-  margin-top: 50px;
+  margin-top: 75px;
   background: #f8f8f8;
   @media screen and (min-width: 768px){
     margin-top: 0;

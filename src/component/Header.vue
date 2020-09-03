@@ -96,7 +96,6 @@ export default {
     padding: 0 70px;
     background: #fff;
     @media screen and (min-width: 768px){
-      position: static;
       height: 75px;
       padding: 0 45px;
     }

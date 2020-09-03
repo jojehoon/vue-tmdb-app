@@ -8,7 +8,8 @@
               <span v-if="GET_MOVIE.tagline" class="movie__tagline">{{ GET_MOVIE.tagline }}</span>
             </h2>
             <figure class="movie__poster">
-              <img class="movie__image" :src="moviePathPoster">
+              <img class="movie__image" :src="moviePathPoster" @load="loaded" data-load="false">
+              <!-- <img class="movie__image" src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/xiz6TiSduvR1U3VLfWVlBEdT9fO.jpg"> -->
             </figure>
           </div>
           <div class="movie__body">
@@ -43,8 +44,17 @@
       modal
     },
 
+    data(){
+      return {
+        isLoad: false,
+      }
+    },
+
     methods: {
-      ...mapMutations(['SET_MODAL'])
+      ...mapMutations(['SET_MODAL']),
+      loaded(e){
+        console.log(e.target.datset.load);
+      }
     },
 
     computed: {
@@ -53,11 +63,11 @@
       // FIXME null 일때 예외 처리할 것
       moviePathBackdrop(){
         if(this.GET_MOVIE.poster_path) return`background-image:url('https://image.tmdb.org/t/p/w500${this.GET_MOVIE.backdrop_path}')`;
-        return 
+        return;
       },
 
       moviePathPoster(){
-        if(this.GET_MOVIE.poster_path) return `https://image.tmdb.org/t/p/w600_and_h900_bestv2${this.GET_MOVIE.poster_path}`
+        if(this.GET_MOVIE.poster_path) return `https://image.tmdb.org/t/p/w300_and_h450_bestv2_filter(blur)${this.GET_MOVIE.poster_path}`
         return '../../src/assets/no-image.png';
       },
     },
